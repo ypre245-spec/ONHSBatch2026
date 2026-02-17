@@ -1051,42 +1051,14 @@
              let val = input.value.trim();
              if (!val) return;
              
-             // 1. Remove common conversational prefixes (e.g. "I want to be")
-             const prefixRegex = /^(i\s+(want|would\s+like)\s+to\s+(be|become))\s+/i;
-             val = val.replace(prefixRegex, "");
-
-             // 2. Check if it already starts with "To be" or "To become"
-             const openerRegex = /^(to\s+be\s+|to\s+become\s+)/i;
-             
              let finalVal = val;
 
-             if (!openerRegex.test(val)) {
-                 // 3. If not, prepend "To become "
-                 // Handle cases where user typed "A doctor" -> "To become a doctor" (fix capitalization of 'A')
-                 if (/^(a|an)\s+/i.test(val)) {
-                     finalVal = "To become " + val.charAt(0).toLowerCase() + val.slice(1);
-                 } else {
-                     finalVal = "To become " + val;
-                 }
-             }
-             
-             // 4. Enforce 50 Character Limit (Strict)
+             // Enforce 50 Character Limit (Strict)
              if (finalVal.length > 50) {
-                 // If adding "To become" makes it too long, try just "To be"
-                 finalVal = finalVal.replace("To become", "To be");
-                 
-                 // If still too long, revert to original user input (better to have correct word than cut off sentence)
-                 if (finalVal.length > 50) {
-                     finalVal = val;
-                 }
-                 
-                 // If original user input was somehow > 50 (shouldn't happen due to maxlength), truncate
-                 if (finalVal.length > 50) {
-                     finalVal = finalVal.substring(0, 50);
-                 }
+                 finalVal = finalVal.substring(0, 50);
              }
 
-             // 5. Ensure Sentence Case
+             // Ensure Sentence Case
              finalVal = finalVal.charAt(0).toUpperCase() + finalVal.slice(1);
              
              input.value = finalVal;
