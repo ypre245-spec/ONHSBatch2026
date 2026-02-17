@@ -185,8 +185,7 @@
         .no-icon ~ .floating-label { left: 1.25rem; }  /* px-5 equivalent */
 
     </style>
-</head>
-<body class="bg-gradient-to-br from-slate-100 to-slate-200 min-h-screen py-6 px-4 md:py-12 flex items-center justify-center">
+<body class="bg-gradient-to-br from-slate-100 to-slate-200 min-h-screen py-4 px-3 md:py-12 md:px-4 flex items-center justify-center">
 
     <div class="w-full max-w-4xl">
         
@@ -195,7 +194,7 @@
             
             <!-- Header Section -->
             <!-- Updated Padding Bottom to pb-24 md:pb-32 (was pb-44 md:pb-48) to reduce negative space -->
-            <div class="bg-pattern p-8 md:p-10 pb-24 md:pb-32 text-white relative overflow-hidden group">
+            <div class="bg-pattern p-6 md:p-10 pb-24 md:pb-32 text-white relative overflow-hidden group">
                 <!-- Overlay Gradient for Depth -->
                 <div class="absolute inset-0 bg-gradient-to-br from-slate-900/95 via-slate-900/80 to-academic-dark/95 z-0"></div>
 
@@ -208,12 +207,12 @@
                     <div class="text-center md:text-left">
                         <!-- Icons removed -->
                         
-                        <h1 class="text-3xl md:text-5xl font-bold tracking-tight text-white mb-3 academic-font drop-shadow-md">
+                        <h1 class="text-2xl md:text-5xl font-bold tracking-tight text-white mb-3 academic-font drop-shadow-md">
                             Odiongan National <span class="text-transparent bg-clip-text bg-gradient-to-r from-academic-gold to-amber-200">High School</span>
                         </h1>
                         
-                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 text-sm font-medium tracking-wide">
-                            <span class="bg-academic-gold/10 text-academic-gold px-4 py-1.5 rounded-full border border-academic-gold/20 shadow-sm backdrop-blur-sm flex items-center gap-2">
+                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 text-xs md:text-sm font-medium tracking-wide">
+                            <span class="bg-academic-gold/10 text-academic-gold px-3 py-1 md:px-4 md:py-1.5 rounded-full border border-academic-gold/20 shadow-sm backdrop-blur-sm flex items-center gap-2">
                                 SY 2025-2026
                             </span>
                             <span class="hidden md:inline-block w-1.5 h-1.5 rounded-full bg-slate-600"></span>
@@ -229,65 +228,65 @@
             </div>
 
             <!-- Steps Progress Bar -->
-            <div class="relative -mt-16 px-6 md:px-16 mb-12">
-                <div class="bg-white rounded-2xl shadow-xl p-6 border border-slate-100 relative z-20">
+            <div class="relative -mt-16 px-4 md:px-16 mb-8 md:mb-12">
+                <div class="bg-white rounded-2xl shadow-xl p-4 md:p-6 border border-slate-100 relative z-20">
                     <div class="flex justify-between items-center relative">
                         <!-- Progress Line Background -->
                         <div class="absolute left-0 top-1/2 w-full h-1 bg-slate-100 -z-10 rounded-full"></div>
                         
                         <!-- Steps -->
                         <div class="flex flex-col items-center step-indicator group cursor-default" id="ind-1">
-                            <div class="w-12 h-12 rounded-full bg-slate-900 text-academic-gold flex items-center justify-center font-bold text-lg transition-all duration-500 border-4 border-white shadow-lg z-10">1</div>
-                            <span class="text-xs font-bold uppercase tracking-wider text-slate-900 mt-3">Info</span>
+                            <div class="w-8 h-8 md:w-12 md:h-12 rounded-full bg-slate-900 text-academic-gold flex items-center justify-center font-bold text-sm md:text-lg transition-all duration-500 border-2 md:border-4 border-white shadow-lg z-10">1</div>
+                            <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider text-slate-900 mt-2 md:mt-3">Info</span>
                         </div>
 
                         <!-- Active Line Segment 1 -->
-                        <div class="flex-1 h-1 mx-2 relative">
+                        <div class="flex-1 h-1 mx-1 md:mx-2 relative">
                             <div class="absolute top-0 left-0 h-full bg-academic-gold transition-all duration-700 w-0 rounded-full shadow-glow" id="progress-1"></div>
                         </div>
 
                         <div class="flex flex-col items-center step-indicator group cursor-default" id="ind-2">
-                            <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-lg transition-all duration-500 border-4 border-white z-10">2</div>
-                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400 mt-3">Family</span>
+                            <div class="w-8 h-8 md:w-12 md:h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-sm md:text-lg transition-all duration-500 border-2 md:border-4 border-white z-10">2</div>
+                            <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider text-slate-400 mt-2 md:mt-3">Family</span>
                         </div>
 
                         <!-- Active Line Segment 2 -->
-                        <div class="flex-1 h-1 mx-2 relative">
+                        <div class="flex-1 h-1 mx-1 md:mx-2 relative">
                             <div class="absolute top-0 left-0 h-full bg-academic-gold transition-all duration-700 w-0 rounded-full shadow-glow" id="progress-2"></div>
                         </div>
 
                         <div class="flex flex-col items-center step-indicator group cursor-default" id="ind-3">
-                            <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-lg transition-all duration-500 border-4 border-white z-10">3</div>
-                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400 mt-3">Details</span>
+                            <div class="w-8 h-8 md:w-12 md:h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-sm md:text-lg transition-all duration-500 border-2 md:border-4 border-white z-10">3</div>
+                            <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider text-slate-400 mt-2 md:mt-3">Details</span>
                         </div>
 
                          <!-- Active Line Segment 3 -->
-                         <div class="flex-1 h-1 mx-2 relative">
+                         <div class="flex-1 h-1 mx-1 md:mx-2 relative">
                             <div class="absolute top-0 left-0 h-full bg-academic-gold transition-all duration-700 w-0 rounded-full shadow-glow" id="progress-3"></div>
                         </div>
 
                         <div class="flex flex-col items-center step-indicator group cursor-default" id="ind-4">
-                            <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-lg transition-all duration-500 border-4 border-white z-10">4</div>
-                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400 mt-3">Review</span>
+                            <div class="w-8 h-8 md:w-12 md:h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-sm md:text-lg transition-all duration-500 border-2 md:border-4 border-white z-10">4</div>
+                            <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider text-slate-400 mt-2 md:mt-3">Review</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <form id="studentForm" class="px-6 md:px-16 pb-12" novalidate>
+            <form id="studentForm" class="px-4 md:px-16 pb-8 md:pb-12" novalidate>
                 
                 <!-- STEP 1: Student Information -->
-                <div id="step-1" class="step-content active space-y-8">
+                <div id="step-1" class="step-content active space-y-6 md:space-y-8">
                     <div class="border-b border-slate-100 pb-4">
-                        <h2 class="text-2xl md:text-3xl font-bold text-slate-800 academic-font">Student Information</h2>
-                        <p class="text-slate-500 mt-1">Please enter the student's personal details correctly.</p>
+                        <h2 class="text-xl md:text-3xl font-bold text-slate-800 academic-font">Student Information</h2>
+                        <p class="text-sm text-slate-500 mt-1">Please enter the student's personal details correctly.</p>
                     </div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                         <div class="input-group-float group">
                             <div class="relative">
                                 <i class="fas fa-users absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors z-20"></i>
-                                <select name="section" required class="has-icon floating-input w-full pl-11 pr-4 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none appearance-none font-medium text-slate-700 cursor-pointer">
+                                <select name="section" required class="has-icon floating-input w-full pl-11 pr-4 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none appearance-none font-medium text-slate-700 cursor-pointer text-sm md:text-base">
                                     <option value="" disabled selected>Select Section</option>
                                     <option value="ABM 1">ABM 1</option>
                                     <option value="ABM 2">ABM 2</option>
@@ -314,7 +313,7 @@
                         <div class="input-group-float group">
                             <div class="relative">
                                 <i class="fas fa-venus-mars absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors z-20"></i>
-                                <select name="gender" id="genderSelect" onchange="toggleSuffix()" required class="has-icon floating-input w-full pl-11 pr-4 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none appearance-none font-medium text-slate-700 cursor-pointer">
+                                <select name="gender" id="genderSelect" onchange="toggleSuffix()" required class="has-icon floating-input w-full pl-11 pr-4 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none appearance-none font-medium text-slate-700 cursor-pointer text-sm md:text-base">
                                     <option value="" disabled selected>Select Gender</option>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
@@ -326,7 +325,7 @@
                     </div>
 
                     <!-- Moved Date of Birth Section Up -->
-                    <div class="form-input-wrapper bg-slate-50 p-6 rounded-2xl border border-slate-200/60 relative">
+                    <div class="form-input-wrapper bg-slate-50 p-4 md:p-6 rounded-2xl border border-slate-200/60 relative">
                         <div class="flex justify-between items-end mb-4">
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide">Date of Birth <span class="text-red-500">*</span></label>
@@ -334,9 +333,10 @@
                             </div>
                             <span id="calculatedAge" class="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-100 px-3 py-1 rounded-full hidden shadow-sm animate-pulse">Age: --</span>
                         </div>
-                        <div class="grid grid-cols-3 gap-3">
+                        <!-- Changed to grid-cols-1 on mobile for better touch targets -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                             <div class="input-group-float group relative">
-                                <select name="dobMonth" id="dobMonth" onchange="calculateAge()" required class="floating-input w-full px-4 bg-white border border-slate-200 rounded-xl focus:bg-white focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none text-slate-700 font-medium">
+                                <select name="dobMonth" id="dobMonth" onchange="calculateAge()" required class="floating-input w-full px-4 bg-white border border-slate-200 rounded-xl focus:bg-white focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none text-slate-700 font-medium text-sm md:text-base">
                                     <option value="" disabled selected>Select</option>
                                     <option value="January">January</option>
                                     <option value="February">February</option>
@@ -354,40 +354,40 @@
                                 <label class="floating-label left-4 text-slate-400">Month</label>
                             </div>
                             <div class="input-group-float group relative">
-                                <input type="number" name="dobDay" id="dobDay" onchange="calculateAge()" placeholder=" " min="1" max="31" required class="no-icon floating-input w-full px-4 bg-white border border-slate-200 rounded-xl focus:bg-white focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none text-center text-slate-700 font-medium placeholder-transparent">
+                                <input type="number" name="dobDay" id="dobDay" onchange="calculateAge()" placeholder=" " min="1" max="31" required class="no-icon floating-input w-full px-4 bg-white border border-slate-200 rounded-xl focus:bg-white focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none text-center text-slate-700 font-medium placeholder-transparent text-sm md:text-base">
                                 <label class="floating-label left-4 text-center w-full pr-8">Day</label>
                             </div>
                             <div class="input-group-float group relative">
-                                <input type="number" name="dobYear" id="dobYear" onchange="calculateAge()" placeholder=" " min="1950" max="2030" required class="no-icon floating-input w-full px-4 bg-white border border-slate-200 rounded-xl focus:bg-white focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none text-center text-slate-700 font-medium placeholder-transparent">
+                                <input type="number" name="dobYear" id="dobYear" onchange="calculateAge()" placeholder=" " min="1950" max="2030" required class="no-icon floating-input w-full px-4 bg-white border border-slate-200 rounded-xl focus:bg-white focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none text-center text-slate-700 font-medium placeholder-transparent text-sm md:text-base">
                                 <label class="floating-label left-4 text-center w-full pr-8">Year</label>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-gradient-to-br from-slate-50 to-white p-8 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow">
+                    <div class="bg-gradient-to-br from-slate-50 to-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow">
                         <div class="absolute top-0 right-0 w-24 h-24 bg-academic-gold/10 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
                         
-                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-6 relative z-10">Official Name <span class="text-slate-400 font-normal normal-case ml-1 italic">(Match Birth Certificate)</span></label>
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-6 relative z-10">Official Name <span class="text-slate-400 font-normal normal-case ml-1 italic block sm:inline">(Match Birth Certificate)</span></label>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 relative z-10">
                             <!-- Student Last Name -->
                             <div class="input-group-float group relative">
-                                <input type="text" name="studentLastName" placeholder=" " required onblur="formatInput(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-white font-medium text-slate-800 placeholder-transparent">
+                                <input type="text" name="studentLastName" placeholder=" " required onblur="formatInput(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-white font-medium text-slate-800 placeholder-transparent text-sm md:text-base">
                                 <label class="floating-label">Last Name</label>
                             </div>
                             <!-- Student First Name -->
                             <div class="input-group-float group relative">
-                                <input type="text" name="studentFirstName" placeholder=" " required onblur="formatInput(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-white font-medium text-slate-800 placeholder-transparent">
+                                <input type="text" name="studentFirstName" placeholder=" " required onblur="formatInput(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-white font-medium text-slate-800 placeholder-transparent text-sm md:text-base">
                                 <label class="floating-label">First Name</label>
                             </div>
                             <!-- Student Middle Name -->
                             <div class="input-group-float group relative">
-                                <input type="text" name="studentMiddleName" placeholder=" " onblur="validateMiddleName(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-white font-medium text-slate-800 placeholder-transparent">
+                                <input type="text" name="studentMiddleName" placeholder=" " onblur="validateMiddleName(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-white font-medium text-slate-800 placeholder-transparent text-sm md:text-base">
                                 <label class="floating-label">Middle Name</label>
                             </div>
                             <!-- Student Suffix -->
                             <div class="input-group-float group relative" id="studentSuffixWrapper">
-                                <select name="studentSuffix" id="studentSuffixInput" class="floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-white font-medium text-slate-800 hidden">
+                                <select name="studentSuffix" id="studentSuffixInput" class="floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-white font-medium text-slate-800 hidden text-sm md:text-base">
                                     <option value="" selected>Suffix (None)</option>
                                     <option value="Jr.">Jr.</option>
                                     <option value="Sr.">Sr.</option>
@@ -403,10 +403,10 @@
                 </div>
 
                 <!-- STEP 2: Family Background -->
-                <div id="step-2" class="step-content space-y-8">
+                <div id="step-2" class="step-content space-y-6 md:space-y-8">
                     <div class="border-b border-slate-100 pb-4">
-                        <h2 class="text-2xl md:text-3xl font-bold text-slate-800 academic-font">Family Background</h2>
-                        <p class="text-slate-500 mt-1">Parental information for school records.</p>
+                        <h2 class="text-xl md:text-3xl font-bold text-slate-800 academic-font">Family Background</h2>
+                        <p class="text-sm text-slate-500 mt-1">Parental information for school records.</p>
                     </div>
                     
                     <div class="space-y-4">
@@ -414,28 +414,28 @@
                             <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mr-3 border border-blue-100">
                                 <i class="fas fa-male text-lg"></i>
                             </div>
-                            <span class="font-bold academic-font text-xl">Father's Name</span>
+                            <span class="font-bold academic-font text-lg md:text-xl">Father's Name</span>
                             <span class="ml-3 text-[10px] uppercase font-bold tracking-wider bg-slate-100 text-slate-500 px-2 py-1 rounded">Optional</span>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pl-0 md:pl-14">
                             <!-- Father Last -->
                             <div class="input-group-float group relative">
-                                <input type="text" name="fatherLastName" placeholder=" " onblur="formatInput(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-slate-50 focus:bg-white transition-all placeholder-transparent">
+                                <input type="text" name="fatherLastName" placeholder=" " onblur="formatInput(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-slate-50 focus:bg-white transition-all placeholder-transparent text-sm md:text-base">
                                 <label class="floating-label">Last Name</label>
                             </div>
                             <!-- Father First -->
                             <div class="input-group-float group relative">
-                                <input type="text" name="fatherFirstName" placeholder=" " onblur="formatInput(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-slate-50 focus:bg-white transition-all placeholder-transparent">
+                                <input type="text" name="fatherFirstName" placeholder=" " onblur="formatInput(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-slate-50 focus:bg-white transition-all placeholder-transparent text-sm md:text-base">
                                 <label class="floating-label">First Name</label>
                             </div>
                             <!-- Father Middle -->
                             <div class="input-group-float group relative">
-                                <input type="text" name="fatherMiddleName" placeholder=" " onblur="validateMiddleName(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-slate-50 focus:bg-white transition-all placeholder-transparent">
+                                <input type="text" name="fatherMiddleName" placeholder=" " onblur="validateMiddleName(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-slate-50 focus:bg-white transition-all placeholder-transparent text-sm md:text-base">
                                 <label class="floating-label">Middle Name</label>
                             </div>
                             <!-- Father Suffix -->
                             <div class="input-group-float group relative">
-                                <select name="fatherSuffix" class="floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-slate-50 focus:bg-white transition-all">
+                                <select name="fatherSuffix" class="floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-slate-50 focus:bg-white transition-all text-sm md:text-base">
                                     <option value="">Suffix (None)</option>
                                     <option value="Jr.">Jr.</option>
                                     <option value="Sr.">Sr.</option>
@@ -453,23 +453,23 @@
                             <div class="w-10 h-10 rounded-full bg-pink-50 text-pink-600 flex items-center justify-center mr-3 border border-pink-100">
                                 <i class="fas fa-female text-lg"></i>
                             </div>
-                            <span class="font-bold academic-font text-xl">Mother's Name</span>
+                            <span class="font-bold academic-font text-lg md:text-xl">Mother's Name</span>
                             <span class="ml-3 text-[10px] uppercase font-bold tracking-wider bg-slate-100 text-slate-500 px-2 py-1 rounded">Optional</span>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pl-0 md:pl-14">
                             <!-- Mother Last -->
                             <div class="input-group-float group relative">
-                                <input type="text" name="motherLastName" placeholder=" " onblur="formatInput(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-slate-50 focus:bg-white transition-all placeholder-transparent">
+                                <input type="text" name="motherLastName" placeholder=" " onblur="formatInput(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-slate-50 focus:bg-white transition-all placeholder-transparent text-sm md:text-base">
                                 <label class="floating-label">Last Name</label>
                             </div>
                             <!-- Mother First -->
                             <div class="input-group-float group relative">
-                                <input type="text" name="motherFirstName" placeholder=" " onblur="formatInput(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-slate-50 focus:bg-white transition-all placeholder-transparent">
+                                <input type="text" name="motherFirstName" placeholder=" " onblur="formatInput(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-slate-50 focus:bg-white transition-all placeholder-transparent text-sm md:text-base">
                                 <label class="floating-label">First Name</label>
                             </div>
                             <!-- Mother Middle -->
                             <div class="input-group-float group relative">
-                                <input type="text" name="motherMiddleName" placeholder=" " onblur="validateMiddleName(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-slate-50 focus:bg-white transition-all placeholder-transparent">
+                                <input type="text" name="motherMiddleName" placeholder=" " onblur="validateMiddleName(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-slate-50 focus:bg-white transition-all placeholder-transparent text-sm md:text-base">
                                 <label class="floating-label">Middle Name</label>
                             </div>
                         </div>
@@ -477,13 +477,13 @@
                 </div>
 
                 <!-- STEP 3: Location & Details -->
-                <div id="step-3" class="step-content space-y-8">
+                <div id="step-3" class="step-content space-y-6 md:space-y-8">
                      <div class="border-b border-slate-100 pb-4">
-                        <h2 class="text-2xl md:text-3xl font-bold text-slate-800 academic-font">Location & Ambitions</h2>
-                        <p class="text-slate-500 mt-1">Residential details and career path.</p>
+                        <h2 class="text-xl md:text-3xl font-bold text-slate-800 academic-font">Location & Ambitions</h2>
+                        <p class="text-sm text-slate-500 mt-1">Residential details and career path.</p>
                     </div>
                     
-                    <div class="bg-amber-50/50 border border-amber-100 rounded-xl p-5 mb-6 flex items-start shadow-sm">
+                    <div class="bg-amber-50/50 border border-amber-100 rounded-xl p-4 md:p-5 mb-6 flex items-start shadow-sm">
                         <i class="fas fa-info-circle text-academic-gold mt-0.5 mr-3 text-lg"></i>
                         <div>
                             <h4 class="text-sm font-bold text-slate-800">Address Information</h4>
@@ -491,11 +491,11 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                         <div class="input-group-float group">
                             <div class="relative">
                                 <i class="fas fa-map-marked-alt absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 z-20"></i>
-                                <select name="municipality" id="municipalitySelect" onchange="updateBarangays()" required class="has-icon floating-input w-full pl-11 pr-4 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none appearance-none transition-all cursor-pointer font-medium text-slate-700">
+                                <select name="municipality" id="municipalitySelect" onchange="updateBarangays()" required class="has-icon floating-input w-full pl-11 pr-4 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none appearance-none transition-all cursor-pointer font-medium text-slate-700 text-sm md:text-base">
                                     <option value="" disabled selected>Select Municipality</option>
                                     <option value="Alcantara">Alcantara</option>
                                     <option value="Banton">Banton</option>
@@ -522,7 +522,7 @@
                         <div class="input-group-float group">
                             <div class="relative">
                                 <i class="fas fa-map-pin absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 z-20"></i>
-                                <select name="barangay" id="barangaySelect" required class="has-icon floating-input w-full pl-11 pr-4 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none appearance-none transition-all cursor-pointer font-medium text-slate-700 disabled:bg-gray-100 disabled:text-gray-400" disabled>
+                                <select name="barangay" id="barangaySelect" required class="has-icon floating-input w-full pl-11 pr-4 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none appearance-none transition-all cursor-pointer font-medium text-slate-700 disabled:bg-gray-100 disabled:text-gray-400 text-sm md:text-base" disabled>
                                     <option value="" disabled selected>Select Municipality First</option>
                                 </select>
                                 <label class="floating-label">Barangay <span class="text-red-500">*</span></label>
@@ -533,17 +533,17 @@
 
                     <div class="input-group-float group relative mt-4">
                         <i class="fas fa-star absolute top-5 left-4 text-academic-gold z-20"></i>
-                        <textarea name="ambition" id="ambitionInput" maxlength="45" rows="3" required onblur="formatAmbition(this)" oninput="document.getElementById('ambitionCount').textContent = this.value.length + '/30'" placeholder=" " class="has-icon floating-input w-full pl-11 pr-4 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none resize-none bg-slate-50 focus:bg-white font-medium text-slate-700 placeholder-transparent"></textarea>
+                        <textarea name="ambition" id="ambitionInput" maxlength="50" rows="3" required onblur="formatAmbition(this)" oninput="document.getElementById('ambitionCount').textContent = this.value.length + '/50'" placeholder=" " class="has-icon floating-input w-full pl-11 pr-4 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none resize-none bg-slate-50 focus:bg-white font-medium text-slate-700 placeholder-transparent text-sm md:text-base"></textarea>
                         <label class="floating-label">Ambition / Future Goal <span class="text-red-500">*</span></label>
-                        <div id="ambitionCount" class="text-right text-[10px] text-slate-400 mt-1 font-medium tracking-wide">0/45</div>
+                        <div id="ambitionCount" class="text-right text-[10px] text-slate-400 mt-1 font-medium tracking-wide">0/50</div>
                     </div>
                 </div>
 
                 <!-- STEP 4: Review & Submit -->
                 <div id="step-4" class="step-content space-y-8">
                     <div class="border-b border-slate-100 pb-4">
-                        <h2 class="text-2xl md:text-3xl font-bold text-slate-800 academic-font">Review Information</h2>
-                        <p class="text-slate-500 mt-1">Verify your information before official submission.</p>
+                        <h2 class="text-xl md:text-3xl font-bold text-slate-800 academic-font">Review Information</h2>
+                        <p class="text-sm text-slate-500 mt-1">Verify your information before official submission.</p>
                     </div>
 
                     <!-- ID Card Style Review -->
@@ -551,7 +551,7 @@
                         <!-- Top Accent -->
                         <div class="h-2 bg-gradient-to-r from-slate-900 via-academic-gold to-slate-900"></div>
                         
-                        <div class="p-8 relative z-10">
+                        <div class="p-6 md:p-8 relative z-10">
                              <!-- Background Seal -->
                             <div class="absolute right-0 bottom-0 opacity-5 pointer-events-none transform translate-x-1/4 translate-y-1/4">
                                 <i class="fas fa-seal text-[12rem] text-slate-900"></i>
@@ -562,7 +562,7 @@
                                     <i class="fas fa-user text-2xl"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-xl font-bold text-slate-900 academic-font" id="reviewName">--</h3>
+                                    <h3 class="text-lg md:text-xl font-bold text-slate-900 academic-font" id="reviewName">--</h3>
                                     <p class="text-sm font-medium text-academic-gold" id="reviewSection">--</p>
                                 </div>
                             </div>
@@ -623,18 +623,18 @@
                     </label>
                 </div>
 
-                <!-- Navigation Buttons -->
-                <div class="mt-12 pt-8 border-t border-slate-100 flex justify-between items-center">
-                    <button type="button" id="prevBtn" onclick="changeStep(-1)" class="hidden group text-slate-400 font-medium hover:text-slate-700 px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
+                <!-- Navigation Buttons (Stacked on Mobile) -->
+                <div class="mt-8 md:mt-12 pt-6 md:pt-8 border-t border-slate-100 flex flex-col-reverse md:flex-row justify-between items-center gap-3">
+                    <button type="button" id="prevBtn" onclick="changeStep(-1)" class="w-full md:w-auto hidden group text-slate-400 font-medium hover:text-slate-700 px-4 py-3 md:py-2 rounded-lg transition-colors flex items-center justify-center md:justify-start gap-2">
                         <i class="fas fa-arrow-left text-sm group-hover:-translate-x-1 transition-transform"></i> Previous
                     </button>
-                    <div class="flex-1"></div>
+                    <div class="hidden md:block flex-1"></div>
                     
-                    <button type="button" id="nextBtn" onclick="changeStep(1)" class="bg-slate-900 hover:bg-slate-800 text-academic-gold font-bold tracking-wide py-4 px-10 rounded-xl shadow-lg shadow-slate-900/20 transform transition-all hover:-translate-y-1 hover:shadow-xl flex items-center gap-3 group">
+                    <button type="button" id="nextBtn" onclick="changeStep(1)" class="w-full md:w-auto bg-slate-900 hover:bg-slate-800 text-academic-gold font-bold tracking-wide py-4 px-10 rounded-xl shadow-lg shadow-slate-900/20 transform transition-all hover:-translate-y-1 hover:shadow-xl flex items-center justify-center gap-3 group">
                         NEXT STEP <i class="fas fa-chevron-right text-xs group-hover:translate-x-1 transition-transform"></i>
                     </button>
                     
-                    <button type="submit" id="submitBtn" class="hidden bg-gradient-to-r from-academic-gold to-amber-600 hover:to-amber-500 text-white font-bold tracking-wide py-4 px-10 rounded-xl shadow-lg shadow-amber-500/30 transform transition-all hover:-translate-y-1 hover:shadow-xl flex items-center gap-3">
+                    <button type="submit" id="submitBtn" class="w-full md:w-auto hidden bg-gradient-to-r from-academic-gold to-amber-600 hover:to-amber-500 text-white font-bold tracking-wide py-4 px-10 rounded-xl shadow-lg shadow-amber-500/30 transform transition-all hover:-translate-y-1 hover:shadow-xl flex items-center justify-center gap-3">
                         SUBMIT RECORD <i class="fas fa-paper-plane"></i>
                     </button>
                 </div>
@@ -859,19 +859,19 @@
                  }
              }
              
-             // 4. Enforce 30 Character Limit (Strict)
-             if (finalVal.length > 30) {
+             // 4. Enforce 50 Character Limit (Strict)
+             if (finalVal.length > 50) {
                  // If adding "To become" makes it too long, try just "To be"
                  finalVal = finalVal.replace("To become", "To be");
                  
                  // If still too long, revert to original user input (better to have correct word than cut off sentence)
-                 if (finalVal.length > 30) {
+                 if (finalVal.length > 50) {
                      finalVal = val;
                  }
                  
-                 // If original user input was somehow > 30 (shouldn't happen due to maxlength), truncate
-                 if (finalVal.length > 30) {
-                     finalVal = finalVal.substring(0, 30);
+                 // If original user input was somehow > 50 (shouldn't happen due to maxlength), truncate
+                 if (finalVal.length > 50) {
+                     finalVal = finalVal.substring(0, 50);
                  }
              }
 
@@ -882,7 +882,7 @@
              
              // Update Counter
              const counter = document.getElementById('ambitionCount');
-             if(counter) counter.textContent = finalVal.length + '/30';
+             if(counter) counter.textContent = finalVal.length + '/50';
 
              saveDraft();
         }
