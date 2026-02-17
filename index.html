@@ -749,9 +749,198 @@
                     </div>
                 </div>
 
+                <!-- Default Close Button -->
                 <button id="closeModalBtn" onclick="closeModal()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded-xl shadow-lg transition transform hover:-translate-y-1">
                     Done & Close
                 </button>
+
+                <!-- Update/Correction Actions (Hidden by default) -->
+                <div id="modalActionButtons" class="hidden flex flex-col md:flex-row gap-3 w-full">
+                    <button onclick="closeModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl transition-colors">
+                        Cancel
+                    </button>
+                    <button id="modalConfirmUpdateBtn" class="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 rounded-xl shadow-lg transition-colors flex items-center justify-center gap-2">
+                        <i class="fas fa-edit"></i> Submit Update
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN LOGIN MODAL -->
+    <div id="adminLoginModal" class="fixed inset-0 z-[60] flex items-center justify-center hidden bg-slate-900/80 backdrop-blur-sm transition-all duration-300">
+        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-sm transform scale-100 border border-slate-200 relative overflow-hidden">
+             <!-- Decorative bg -->
+             <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-slate-900 via-academic-gold to-slate-900"></div>
+
+            <div class="text-center mb-6 mt-2">
+                <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-slate-200">
+                    <i class="fas fa-user-shield text-3xl text-slate-800"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 academic-font">Admin Access</h3>
+                <p class="text-xs text-slate-400 mt-1">Authorized Personnel Only</p>
+            </div>
+            <form onsubmit="handleAdminLogin(event)">
+                <div class="mb-4">
+                    <input type="password" id="adminPassword" placeholder="Enter Access Code" class="w-full px-4 py-3 border border-slate-300 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none transition-all font-medium text-center tracking-widest" autocomplete="off">
+                </div>
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeAdminLogin()" class="flex-1 py-3 bg-slate-100 text-slate-600 font-bold rounded-xl hover:bg-slate-200 transition-colors">Cancel</button>
+                    <button type="submit" class="flex-1 py-3 bg-slate-900 text-academic-gold font-bold rounded-xl hover:bg-slate-800 transition-colors shadow-lg">Unlock</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ADMIN DASHBOARD MODAL -->
+    <div id="adminDashboardModal" class="fixed inset-0 z-[60] flex items-center justify-center hidden bg-slate-900/90 backdrop-blur-md transition-all duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden mx-4 md:mx-0 animate-fade-in-up">
+            <!-- Header -->
+            <div class="bg-slate-900 p-6 flex justify-between items-center shrink-0 border-b border-white/10 relative overflow-hidden">
+                <!-- Abstract bg -->
+                <div class="absolute inset-0 bg-pattern opacity-10"></div>
+
+                <div class="flex items-center gap-4 relative z-10">
+                    <div class="w-12 h-12 rounded-xl bg-academic-gold/20 flex items-center justify-center text-academic-gold border border-academic-gold/50 shadow-glow">
+                        <i class="fas fa-database text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-bold text-white academic-font">System Dashboard</h2>
+                        <div class="flex items-center gap-2" id="connectionStatusWrapper">
+                             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" id="connectionDot"></span>
+                             <p class="text-[10px] text-slate-400 uppercase tracking-wider" id="connectionText">Live Cloud Data</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 relative z-10">
+                    <!-- Source Toggle -->
+                    <div class="hidden md:flex bg-slate-800 rounded-lg p-1 border border-slate-700">
+                        <button onclick="switchDashboardSource('cloud')" id="btnSourceCloud" class="px-3 py-1.5 rounded-md text-xs font-bold transition-all bg-academic-gold text-slate-900 shadow-sm">
+                            <i class="fas fa-cloud mr-1"></i> Cloud
+                        </button>
+                        <button onclick="switchDashboardSource('local')" id="btnSourceLocal" class="px-3 py-1.5 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white">
+                            <i class="fas fa-laptop mr-1"></i> Local
+                        </button>
+                    </div>
+
+                    <button onclick="closeAdminDashboard()" class="text-slate-400 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-full">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Content -->
+            <div class="flex-1 overflow-y-auto p-6 md:p-8 custom-scrollbar bg-slate-50">
+                
+                <!-- Stats Row -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6">
+                    <!-- Stat Card 1 -->
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
+                        <div class="absolute right-0 top-0 p-4 opacity-5">
+                            <i class="fas fa-users text-6xl text-slate-900"></i>
+                        </div>
+                        <div class="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-2">Total Registered</div>
+                        <div class="text-4xl font-bold text-slate-800 academic-font" id="statSubmitted">0</div>
+                    </div>
+                     <!-- Stat Card 2 -->
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
+                        <div class="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-2">Current Session</div>
+                        <div class="text-xl font-bold flex items-center gap-2" id="statDraft">
+                            Loading...
+                        </div>
+                        <p class="text-xs text-slate-400 mt-2" id="statDraftMsg">--</p>
+                    </div>
+                     <!-- Stat Card 3 -->
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
+                         <div class="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-2">Data Source</div>
+                        <div class="text-xl font-bold text-slate-800 flex items-center gap-2" id="dataSourceDisplay">
+                            <i class="fas fa-cloud text-sky-500"></i> Google Sheet
+                        </div>
+                        <p class="text-xs text-slate-400 mt-2" id="dataSourceSub">Syncing with Drive...</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <!-- Section Breakdown (New) -->
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-80">
+                        <div class="px-6 py-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-sm">Section Breakdown</h3>
+                                <p class="text-xs text-slate-400 mt-0.5">Real-time distribution</p>
+                            </div>
+                            <i class="fas fa-chart-pie text-slate-300"></i>
+                        </div>
+                        
+                        <!-- Wrapper handles layout/scroll -->
+                        <div class="p-4 overflow-y-auto custom-scrollbar flex-1 relative">
+                             <!-- Loader (Now safe from innerHTML overwrites) -->
+                             <div id="sectionLoader" class="hidden absolute inset-0 flex items-center justify-center bg-white/80 z-10">
+                                <i class="fas fa-circle-notch fa-spin text-academic-gold text-2xl"></i>
+                            </div>
+                            
+                            <!-- Content Container (Targeted by JS) -->
+                            <div id="sectionStatsContainer">
+                                <!-- Dynamic Items will appear here -->
+                                <div class="h-full flex flex-col items-center justify-center text-slate-300 py-10">
+                                    <i class="fas fa-chart-bar text-3xl mb-2"></i>
+                                    <span class="text-xs">No data yet</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity Table (Updated to span 2 cols on large screens) -->
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-80 lg:col-span-2">
+                        <div class="bg-white px-6 py-4 border-b border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center shrink-0 gap-3">
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-sm" id="logTitle">Submission Log</h3>
+                                <p class="text-xs text-slate-400 mt-0.5" id="logSubtitle">Records from Google Sheet</p>
+                            </div>
+                            <div class="flex items-center gap-2 w-full sm:w-auto">
+                                <div class="relative flex-1 sm:flex-none">
+                                    <i class="fas fa-filter absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs z-10"></i>
+                                    <select id="sectionFilter" onchange="applySectionFilter()" class="w-full sm:w-40 pl-8 pr-8 py-1.5 text-xs font-bold border border-slate-200 rounded-lg focus:border-academic-gold focus:ring-1 focus:ring-academic-gold outline-none bg-slate-50 text-slate-600 appearance-none cursor-pointer hover:bg-white transition-colors relative z-0">
+                                        <option value="all">All Sections</option>
+                                    </select>
+                                    <i class="fas fa-chevron-down absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] pointer-events-none z-10"></i>
+                                </div>
+                                <button onclick="downloadReport()" title="Download CSV Report" class="group flex items-center justify-center w-8 h-8 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-bold hover:bg-emerald-100 hover:text-emerald-700 transition-colors border border-emerald-100">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button onclick="refreshDashboard()" title="Refresh Data" class="group flex items-center justify-center w-8 h-8 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-200 transition-colors">
+                                    <i class="fas fa-sync-alt group-hover:spin-slow"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex-1 overflow-y-auto custom-scrollbar relative">
+                            <table class="w-full text-sm text-left">
+                                <thead class="bg-slate-50 text-slate-500 text-xs font-bold uppercase tracking-wider border-b border-slate-100 sticky top-0 z-10">
+                                    <tr>
+                                        <th class="px-6 py-3 bg-slate-50">Student Name</th>
+                                        <th class="px-6 py-3 bg-slate-50">Section</th>
+                                        <th class="px-6 py-3 bg-slate-50 text-right">Date/Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="submissionTableBody" class="divide-y divide-slate-100 text-slate-600">
+                                    <!-- Dynamic Rows -->
+                                </tbody>
+                            </table>
+                            <div id="tableLoader" class="hidden absolute inset-0 flex items-center justify-center bg-white z-20">
+                                 <div class="text-center">
+                                    <i class="fas fa-circle-notch fa-spin text-academic-gold text-3xl mb-3"></i>
+                                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Fetching Data...</p>
+                                 </div>
+                            </div>
+                            <div id="emptyState" class="hidden absolute inset-0 flex flex-col items-center justify-center">
+                                <div class="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-3 text-slate-300">
+                                    <i class="fas fa-inbox text-2xl"></i>
+                                </div>
+                                <p class="text-slate-400 text-sm font-medium">No records found.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -760,8 +949,16 @@
         // --- DATA & CONFIG ---
         let currentStep = 1;
         const totalSteps = 4; // Info, Family, Details, Review
-        const draftKey = 'studentFormDraft_v2'; // Reverted key
-        const submittedKey = 'submittedStudents_v1'; // Key for client-side duplicate check
+        const draftKey = 'studentFormDraft_v2'; 
+        
+        // UPGRADED to v2 to support storing Objects {name, section} instead of just strings
+        const submittedKey = 'submittedStudents_v2'; 
+        const legacyKey = 'submittedStudents_v1'; // Track old key for migration
+        
+        // CONFIG FOR CLOUD SYNC
+        const GOOGLE_SHEET_ID = '1H5QmDnvG03n_8-oMUFJQDrTjWU0n0rjLqIYl8kaOoA8';
+        let dashboardMode = 'cloud'; // 'local' or 'cloud'
+        let currentDashboardData = []; // Store data for filtering
 
         const barangayData = {
             "Alcantara": ["Bonlao", "Calagonsao", "Camili", "Comod-om", "Madalag", "Poblacion", "San Isidro", "Tugdan", "Bagsik", "Gui-ob", "Lawan", "San Roque"],
@@ -1215,9 +1412,41 @@
         document.getElementById('studentForm').addEventListener('input', saveDraft);
         document.getElementById('studentForm').addEventListener('change', saveDraft);
 
+        // --- DATA MIGRATION UTILITY ---
+        function migrateLegacyData() {
+            try {
+                const v1Data = localStorage.getItem(legacyKey);
+                const v2Data = localStorage.getItem(submittedKey);
+
+                // Only migrate if V1 exists and V2 is empty (to prevent duplicates/overwrites)
+                if (v1Data && (!v2Data || JSON.parse(v2Data).length === 0)) {
+                    const listV1 = JSON.parse(v1Data);
+                    const listV2 = [];
+
+                    console.log(`Migrating ${listV1.length} legacy records...`);
+
+                    listV1.forEach(name => {
+                        listV2.push({
+                            name: name,
+                            section: 'Legacy Record', // Default for old data
+                            timestamp: new Date().toISOString()
+                        });
+                    });
+
+                    localStorage.setItem(submittedKey, JSON.stringify(listV2));
+                    // Optional: localStorage.removeItem(legacyKey); // Keep for safety for now
+                }
+            } catch (e) {
+                console.error("Migration failed:", e);
+            }
+        }
+
         // --- INITIALIZATION ---
 
         window.onload = function() {
+            // Attempt migration first
+            migrateLegacyData();
+            
             // Load saved student data
             loadDraft();
         };
@@ -1231,15 +1460,17 @@
             const subtitle = document.getElementById('modalSubtitle');
             const dataContainer = document.getElementById('modalDataContainer');
             const btn = document.getElementById('closeModalBtn');
+            const actions = document.getElementById('modalActionButtons');
 
             // Reset Styles (Default Success)
             icon.className = 'fas fa-check-circle text-5xl text-emerald-500';
             title.textContent = 'Registration Complete';
             title.className = 'text-3xl font-bold academic-font text-slate-800 mb-2';
             subtitle.textContent = 'Your record has been successfully submitted.';
+            
             dataContainer.classList.remove('hidden');
-            btn.textContent = 'Done & Close';
-            btn.className = 'w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded-xl shadow-lg transition transform hover:-translate-y-1';
+            btn.classList.remove('hidden'); // Show default close
+            actions.classList.add('hidden'); // Hide update actions
 
             // Generate Reference
             const ref = 'SR-' + Math.floor(100000 + Math.random() * 900000);
@@ -1302,7 +1533,8 @@
             }, 10);
         }
 
-        function openDuplicateModal(name) {
+        // Updated Duplicate Modal to accept a Callback
+        function openDuplicateModal(name, onConfirmCallback) {
             const modal = document.getElementById('successModal');
             const modalContent = document.getElementById('successModalContent');
             const icon = document.getElementById('modalIcon');
@@ -1310,20 +1542,29 @@
             const subtitle = document.getElementById('modalSubtitle');
             const dataContainer = document.getElementById('modalDataContainer');
             const btn = document.getElementById('closeModalBtn');
+            const actions = document.getElementById('modalActionButtons');
+            const confirmBtn = document.getElementById('modalConfirmUpdateBtn');
 
             // Warning Styles
             icon.className = 'fas fa-exclamation-circle text-5xl text-amber-500';
             
             title.textContent = 'Record Already Exists';
-            title.className = 'text-3xl font-bold academic-font text-slate-800 mb-2';
+            title.className = 'text-2xl md:text-3xl font-bold academic-font text-slate-800 mb-2';
             
-            subtitle.textContent = `Student Name: ${name}`;
+            subtitle.innerHTML = `Student Name: <strong>${name}</strong><br><span class="text-xs font-normal mt-2 block">Do you want to update/correct your information?</span>`;
             
-            // Hide Data Container since it's an error
+            // Hide Data Container since it's an error/prompt
             dataContainer.classList.add('hidden');
 
-            btn.textContent = 'Review Information';
-            btn.className = 'w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded-xl shadow-lg transition transform hover:-translate-y-1';
+            // Swap Buttons
+            btn.classList.add('hidden');
+            actions.classList.remove('hidden');
+
+            // Bind Callback to the Update Button
+            confirmBtn.onclick = function() {
+                closeModal();
+                if (onConfirmCallback) onConfirmCallback();
+            };
 
             modal.classList.remove('hidden');
             setTimeout(() => {
@@ -1347,64 +1588,53 @@
 
         // --- SUBMISSION ---
 
-        // Helper: Check local storage for duplicates
+        // Helper: Check local storage for duplicates (Updated for v2 Objects)
         function isDuplicateLocal(name) {
             const list = JSON.parse(localStorage.getItem(submittedKey) || '[]');
-            return list.includes(name);
+            return list.some(item => {
+                const storedName = typeof item === 'string' ? item : item.name;
+                return storedName === name;
+            });
         }
 
-        // Helper: Save to local storage
-        function saveLocalSubmission(name) {
+        // Helper: Save to local storage (Updated to save Section)
+        function saveLocalSubmission(name, section) {
             const list = JSON.parse(localStorage.getItem(submittedKey) || '[]');
-            if (!list.includes(name)) {
-                list.push(name);
-                localStorage.setItem(submittedKey, JSON.stringify(list));
+            
+            // Check for duplicate before adding
+            const existingIndex = list.findIndex(item => {
+                const storedName = typeof item === 'string' ? item : item.name;
+                return storedName === name;
+            });
+
+            if (existingIndex === -1) {
+                // New Record
+                list.push({
+                    name: name,
+                    section: section || 'Unknown',
+                    timestamp: new Date().toISOString()
+                });
+            } else {
+                // Update Timestamp of existing record
+                if (typeof list[existingIndex] === 'object') {
+                    list[existingIndex].timestamp = new Date().toISOString();
+                    list[existingIndex].section = section || list[existingIndex].section;
+                }
             }
+            
+            localStorage.setItem(submittedKey, JSON.stringify(list));
         }
 
-        document.getElementById('studentForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            console.log("Submit event triggered."); // Debugging
-            
-            // Ensure last step (Review/Privacy) is valid before submitting
-            if (!validateStep(4)) {
-                console.log("Validation failed on Step 4.");
-                alert("Please check the 'Data Privacy Consent' box to continue.");
-                return;
-            }
-
-            const btn = document.getElementById('submitBtn');
-            const status = document.getElementById('statusMessage');
-            
-            // Hardcoded URL (Replaced input field)
+        // Separate function to handle the actual API call
+        function executeSubmission(formData, btn, originalText, localStudentName, localSection) {
             const scriptURL = "https://script.google.com/macros/s/AKfycbxBIBFwW5TgAQvwa2h4OF04bCkePzroQc-fecpHc0RbXWmb_BMDATohaFPSoPnI9YRYhA/exec";
             
-            // Grab data for Modal BEFORE form resets
-            const formData = new FormData(e.target);
-
-            // Construct name locally for Client-Side Duplicate Check
-            let localStudentName = `${formData.get('studentLastName')}, ${formData.get('studentFirstName')}`;
-            if (formData.get('studentMiddleName')) localStudentName += ` ${formData.get('studentMiddleName')}`;
-            if (formData.get('studentSuffix')) localStudentName += ` ${formData.get('studentSuffix')}`;
-            localStudentName = localStudentName.trim().toUpperCase(); // Normalize for comparison
-
-            // 1. Client-Side Duplicate Check
-            if (isDuplicateLocal(localStudentName)) {
-                openDuplicateModal(localStudentName);
-                return; // Stop here, do not fetch
-            }
-
             // Loading State
             btn.disabled = true;
-            const originalText = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Processing...';
+            const status = document.getElementById('statusMessage');
             status.className = 'hidden';
 
-            console.log("Submitting to:", scriptURL);
-
-            // 2. Opaque Submission (no-cors)
-            // This ignores CORS errors but returns an opaque response (we can't read success/fail message)
-            // We assume success if the fetch promise resolves.
             const params = new URLSearchParams();
             for (const pair of formData) {
                 params.append(pair[0], pair[1]);
@@ -1413,21 +1643,20 @@
             fetch(scriptURL, {
                 method: 'POST',
                 body: params,
-                mode: 'no-cors' // Fixes the "Failed to fetch" CORS error
+                mode: 'no-cors'
             })
             .then(() => {
-                // Since mode is no-cors, we can't check response.ok or response.json()
-                // We assume the data was sent successfully.
                 console.log("Request sent (Opaque response).");
 
-                // Save locally to prevent immediate duplicate
-                saveLocalSubmission(localStudentName);
+                // Save/Update local storage
+                saveLocalSubmission(localStudentName, localSection);
 
                 // Show Success Modal
                 openModal(formData);
                 
                 // Reset Form logic
-                e.target.reset();
+                const form = document.getElementById('studentForm');
+                form.reset();
                 clearDraft(); 
                 currentStep = 1;
                 showStep(1); 
@@ -1448,7 +1677,508 @@
                 btn.disabled = false;
                 btn.innerHTML = originalText;
             });
+        }
+
+        document.getElementById('studentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!validateStep(4)) {
+                alert("Please check the 'Data Privacy Consent' box to continue.");
+                return;
+            }
+
+            const btn = document.getElementById('submitBtn');
+            const originalText = btn.innerHTML; // Save original text
+            const formData = new FormData(e.target);
+
+            let localStudentName = `${formData.get('studentLastName')}, ${formData.get('studentFirstName')}`;
+            if (formData.get('studentMiddleName')) localStudentName += ` ${formData.get('studentMiddleName')}`;
+            if (formData.get('studentSuffix')) localStudentName += ` ${formData.get('studentSuffix')}`;
+            localStudentName = localStudentName.trim().toUpperCase(); 
+
+            const localSection = formData.get('section');
+
+            // 1. Client-Side Duplicate Check
+            if (isDuplicateLocal(localStudentName)) {
+                openDuplicateModal(localStudentName, function() {
+                    // This function runs if user clicks "Submit Update"
+                    executeSubmission(formData, btn, originalText, localStudentName, localSection);
+                });
+                return; // Stop default flow
+            }
+
+            // Normal Submission
+            executeSubmission(formData, btn, originalText, localStudentName, localSection);
         });
+
+        // --- ADMIN DASHBOARD LOGIC ---
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12') {
+                e.preventDefault(); 
+                openAdminLogin();
+            }
+        });
+
+        function openAdminLogin() {
+            document.getElementById('adminLoginModal').classList.remove('hidden');
+            setTimeout(() => {
+                const input = document.getElementById('adminPassword');
+                input.value = '';
+                input.focus();
+            }, 50);
+        }
+
+        function closeAdminLogin() {
+            document.getElementById('adminLoginModal').classList.add('hidden');
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const pass = document.getElementById('adminPassword').value;
+            if (pass === 'admin123' || pass === 'admin') {
+                closeAdminLogin();
+                openAdminDashboard();
+            } else {
+                const input = document.getElementById('adminPassword');
+                input.classList.add('border-red-500', 'bg-red-50');
+                input.value = '';
+                input.placeholder = 'Incorrect Password';
+                setTimeout(() => {
+                    input.classList.remove('border-red-500', 'bg-red-50');
+                    input.placeholder = 'Enter Access Code';
+                }, 1500);
+            }
+        }
+
+        function openAdminDashboard() {
+            migrateLegacyData();
+            // Default to Cloud fetch on open
+            switchDashboardSource(dashboardMode); 
+            document.getElementById('adminDashboardModal').classList.remove('hidden');
+        }
+
+        function closeAdminDashboard() {
+            document.getElementById('adminDashboardModal').classList.add('hidden');
+        }
+
+        function refreshDashboard() {
+            if(dashboardMode === 'cloud') {
+                fetchCloudData();
+            } else {
+                renderDashboardStats(); // Local render
+            }
+        }
+
+        function switchDashboardSource(mode) {
+            dashboardMode = mode;
+            const btnCloud = document.getElementById('btnSourceCloud');
+            const btnLocal = document.getElementById('btnSourceLocal');
+            const sourceDisplay = document.getElementById('dataSourceDisplay');
+            const sourceSub = document.getElementById('dataSourceSub');
+            const dot = document.getElementById('connectionDot');
+            const text = document.getElementById('connectionText');
+
+            if (mode === 'cloud') {
+                // UI State: Cloud
+                btnCloud.className = "px-3 py-1.5 rounded-md text-xs font-bold transition-all bg-academic-gold text-slate-900 shadow-sm";
+                btnLocal.className = "px-3 py-1.5 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white";
+                sourceDisplay.innerHTML = '<i class="fas fa-cloud text-sky-500"></i> Google Sheet';
+                sourceSub.textContent = 'Syncing with Drive...';
+                dot.className = "w-2 h-2 rounded-full bg-sky-500 animate-pulse";
+                text.textContent = "Live Cloud Data";
+                document.getElementById('logSubtitle').textContent = "Records from Google Sheet";
+                
+                fetchCloudData(); // Trigger Fetch
+            } else {
+                // UI State: Local
+                btnLocal.className = "px-3 py-1.5 rounded-md text-xs font-bold transition-all bg-academic-gold text-slate-900 shadow-sm";
+                btnCloud.className = "px-3 py-1.5 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white";
+                sourceDisplay.innerHTML = '<i class="fas fa-laptop text-emerald-500"></i> Local Kiosk';
+                sourceSub.textContent = 'Data on this device only';
+                dot.className = "w-2 h-2 rounded-full bg-emerald-500";
+                text.textContent = "Local Kiosk Mode";
+                document.getElementById('logSubtitle').textContent = "Records stored in browser cache";
+
+                renderDashboardStats(); // Trigger Local Render
+            }
+        }
+
+        // --- CLOUD FETCH LOGIC ---
+        function fetchCloudData() {
+            const tableLoader = document.getElementById('tableLoader');
+            const sectionLoader = document.getElementById('sectionLoader');
+            
+            // Show loaders
+            if (tableLoader) tableLoader.classList.remove('hidden');
+            if (sectionLoader) sectionLoader.classList.remove('hidden');
+
+            // Google Viz Query
+            const query = new google.visualization.Query(`https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/gviz/tq?tqx=out:json`);
+            
+            query.send(response => {
+                // Hide loaders
+                if (tableLoader) tableLoader.classList.add('hidden');
+                if (sectionLoader) sectionLoader.classList.add('hidden');
+
+                if (response.isError()) {
+                    console.error('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+                    alert('Failed to connect to Google Sheet. Please check your internet connection or Sheet permissions.');
+                    return;
+                }
+
+                const dataTable = response.getDataTable();
+                const jsonData = [];
+                const numRows = dataTable.getNumberOfRows();
+                const numCols = dataTable.getNumberOfColumns();
+
+                // Define fields to capture based on user request
+                // Patterns are lowercase keywords to match in headers
+                const fieldConfig = {
+                    timestamp: { patterns: ['timestamp', 'date'], index: 0 }, // Default col 0
+                    section: { patterns: ['section'], index: -1 },
+                    gender: { patterns: ['gender'], index: -1 },
+                    studentLastName: { patterns: ['student last name', 'last name', 'lastname'], index: -1, exclude: ['father', 'mother', 'parent'] },
+                    studentFirstName: { patterns: ['student first name', 'first name', 'firstname'], index: -1, exclude: ['father', 'mother', 'parent'] },
+                    studentMiddleName: { patterns: ['student middle name', 'middle name', 'middlename'], index: -1, exclude: ['father', 'mother', 'parent'] },
+                    studentSuffix: { patterns: ['student suffix', 'suffix'], index: -1, exclude: ['father'] },
+                    dobMonth: { patterns: ['dob month', 'month'], index: -1 },
+                    dobDay: { patterns: ['dob day', 'day'], index: -1 },
+                    dobYear: { patterns: ['dob year', 'year'], index: -1 },
+                    fatherLastName: { patterns: ['father last name', 'father\'s last'], index: -1 },
+                    fatherFirstName: { patterns: ['father first name', 'father\'s first'], index: -1 },
+                    fatherMiddleName: { patterns: ['father middle name', 'father\'s middle'], index: -1 },
+                    fatherSuffix: { patterns: ['father suffix', 'father\'s suffix'], index: -1 },
+                    motherLastName: { patterns: ['mother last name', 'mother\'s last'], index: -1 },
+                    motherFirstName: { patterns: ['mother first name', 'mother\'s first'], index: -1 },
+                    motherMiddleName: { patterns: ['mother middle name', 'mother\'s middle'], index: -1 },
+                    municipality: { patterns: ['municipality'], index: -1 },
+                    barangay: { patterns: ['barangay'], index: -1 },
+                    ambition: { patterns: ['ambition'], index: -1 }
+                };
+
+                // 1. Scan headers to identify column indices
+                for (let c = 0; c < numCols; c++) {
+                    const rawLabel = (dataTable.getColumnLabel(c) || '').toLowerCase();
+                    
+                    for (const [key, config] of Object.entries(fieldConfig)) {
+                        if (config.index !== -1 && key !== 'timestamp') continue; // Already found (except timestamp which defaults to 0 but might be elsewhere)
+
+                        // Check exclusions
+                        if (config.exclude && config.exclude.some(ex => rawLabel.includes(ex))) continue;
+
+                        // Check patterns
+                        if (config.patterns.some(p => rawLabel.includes(p))) {
+                            config.index = c;
+                        }
+                    }
+                }
+
+                // Fallback: If section index is missing, try to find it in the data
+                const sectionKeywords = ["ABM", "STEM", "HUMSS", "TVL", "GAS", "ARTS", "SPORTS"];
+                if (fieldConfig.section.index === -1 && numRows > 0) {
+                    for (let c = 0; c < numCols; c++) {
+                        const val = dataTable.getValue(numRows - 1, c);
+                        if (typeof val === 'string' && sectionKeywords.some(k => val.includes(k))) {
+                            fieldConfig.section.index = c;
+                            break;
+                        }
+                    }
+                }
+
+                // 2. Iterate Rows and Extract Data
+                for (let i = 0; i < numRows; i++) {
+                    const rowData = {};
+                    
+                    // Extract fields based on mapping
+                    for (const [key, config] of Object.entries(fieldConfig)) {
+                        let val = '';
+                        if (config.index !== -1 && config.index < numCols) {
+                            val = dataTable.getValue(i, config.index);
+                        }
+                        rowData[key] = val !== null && val !== undefined ? String(val) : '';
+                    }
+
+                    // Format Timestamp
+                    let rawTime = fieldConfig.timestamp.index !== -1 ? dataTable.getValue(i, fieldConfig.timestamp.index) : null;
+                    if (rawTime instanceof Date) {
+                        rowData.timestamp = rawTime.toISOString();
+                    } else if (!rowData.timestamp) {
+                        rowData.timestamp = new Date().toISOString(); // Fallback
+                    }
+
+                    // Construct Composite Name for UI (Title Case)
+                    let fullName = "Student";
+                    const sLast = toTitleCase(rowData.studentLastName);
+                    const sFirst = toTitleCase(rowData.studentFirstName);
+                    
+                    if (sLast || sFirst) {
+                        fullName = `${sLast}, ${sFirst}`;
+                        if(rowData.studentMiddleName && rowData.studentMiddleName.length > 1) fullName += ` ${toTitleCase(rowData.studentMiddleName)}`;
+                        if(rowData.studentSuffix && rowData.studentSuffix !== 'N/A') fullName += ` ${rowData.studentSuffix}`;
+                    } else {
+                        // Very rough fallback if headers failed completely but data exists
+                        // Try to use column 1 as name if mapped name is empty
+                        const guessName = dataTable.getValue(i, 1);
+                        if(typeof guessName === 'string' && guessName.length > 2) fullName = guessName; 
+                    }
+                    
+                    rowData.name = fullName.replace(/^, /, '').trim(); // Clean up if first name missing
+                    if(!rowData.section) rowData.section = "Unknown";
+
+                    jsonData.push(rowData);
+                }
+
+                updateDashboardUI(jsonData);
+            });
+        }
+
+        // Shared Render Function (Used by both Local and Cloud)
+        function updateDashboardUI(list) {
+            currentDashboardData = list; // Cache data for filtering
+
+            // Update Count
+            document.getElementById('statSubmitted').textContent = list.length;
+            
+            // Draft Status (Independent of cloud/local source)
+            const draft = localStorage.getItem(draftKey);
+            const statDraft = document.getElementById('statDraft');
+            const statDraftMsg = document.getElementById('statDraftMsg');
+            if (draft) {
+                statDraft.innerHTML = '<span class="text-amber-500"><i class="fas fa-file-alt"></i> Active</span>';
+                statDraftMsg.textContent = 'Unfinished form in progress';
+            } else {
+                statDraft.innerHTML = '<span class="text-slate-400"><i class="far fa-file"></i> Empty</span>';
+                statDraftMsg.textContent = 'No active session';
+            }
+
+            // --- RENDER SECTION STATS (Based on Total Data) ---
+            const sectionContainer = document.getElementById('sectionStatsContainer');
+            const sectionCounts = {};
+
+            list.forEach(item => {
+                const sec = item.section || 'Unknown';
+                sectionCounts[sec] = (sectionCounts[sec] || 0) + 1;
+            });
+
+            // Populate Filter Dropdown (Preserving selection if possible)
+            populateSectionFilter(Object.keys(sectionCounts));
+
+            if (Object.keys(sectionCounts).length === 0) {
+                sectionContainer.innerHTML = `
+                    <div class="h-full flex flex-col items-center justify-center text-slate-300 min-h-[160px]">
+                        <i class="fas fa-chart-bar text-3xl mb-2"></i>
+                        <span class="text-xs">No data yet</span>
+                    </div>`;
+            } else {
+                sectionContainer.innerHTML = '';
+                // Sort by count descending
+                Object.entries(sectionCounts)
+                    .sort(([,a], [,b]) => b - a)
+                    .forEach(([sec, count]) => {
+                        const total = list.length;
+                        const percent = Math.round((count / total) * 100);
+                        
+                        const row = document.createElement('div');
+                        row.className = 'mb-3 group cursor-pointer hover:bg-slate-50 p-1 rounded transition-colors';
+                        // Add click to filter from bar
+                        row.onclick = () => {
+                            const filter = document.getElementById('sectionFilter');
+                            filter.value = sec;
+                            applySectionFilter();
+                        };
+
+                        row.innerHTML = `
+                            <div class="flex justify-between items-center text-xs font-bold text-slate-700 mb-1">
+                                <span>${sec}</span>
+                                <span class="bg-slate-100 px-2 py-0.5 rounded-full group-hover:bg-academic-gold group-hover:text-white transition-colors">${count}</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                                <div class="bg-slate-800 h-1.5 rounded-full transition-all duration-1000" style="width: ${percent}%"></div>
+                            </div>
+                        `;
+                        sectionContainer.appendChild(row);
+                    });
+            }
+
+            // --- RENDER LOG TABLE (Based on Filter) ---
+            applySectionFilter();
+        }
+
+        // Populate the dropdown options
+        function populateSectionFilter(sections) {
+            const filter = document.getElementById('sectionFilter');
+            const currentVal = filter.value;
+            
+            // Sort sections alphabetically
+            sections.sort();
+
+            let options = '<option value="all">All Sections</option>';
+            sections.forEach(sec => {
+                options += `<option value="${sec}">${sec}</option>`;
+            });
+            
+            filter.innerHTML = options;
+
+            // Restore selection if it still exists, otherwise default to all
+            if (sections.includes(currentVal)) {
+                filter.value = currentVal;
+            } else {
+                filter.value = 'all';
+            }
+        }
+
+        // Apply filter logic
+        function applySectionFilter() {
+            const filterVal = document.getElementById('sectionFilter').value;
+            let filteredList = currentDashboardData;
+
+            if (filterVal !== 'all') {
+                filteredList = currentDashboardData.filter(item => (item.section || 'Unknown') === filterVal);
+            }
+
+            renderLogTable(filteredList);
+        }
+
+        // --- EXPORT FUNCTIONALITY ---
+        function downloadReport() {
+            const filterVal = document.getElementById('sectionFilter').value;
+            let dataToExport = currentDashboardData;
+
+            // Apply current filter to export data
+            if (filterVal !== 'all') {
+                dataToExport = currentDashboardData.filter(item => (item.section || 'Unknown') === filterVal);
+            }
+
+            if (!dataToExport || dataToExport.length === 0) {
+                alert("No data available to download for the selected filter.");
+                return;
+            }
+
+            // CSV Header (Ordered as requested)
+            const headers = [
+                "Date Registered", "Section", "Gender", 
+                "Student Last Name", "Student First Name", "Student Middle Name", "Student Suffix",
+                "DOB Month", "DOB Day", "DOB Year",
+                "Father Last Name", "Father First Name", "Father Middle Name", "Father Suffix",
+                "Mother Last Name", "Mother First Name", "Mother Middle Name",
+                "Municipality", "Barangay", "Ambition"
+            ];
+            
+            let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n";
+
+            // Helper to escape CSV fields
+            const escape = (val) => {
+                if (val === null || val === undefined) return "";
+                let s = String(val).replace(/"/g, '""'); // Escape double quotes
+                if (s.includes(",") || s.includes("\n") || s.includes('"')) {
+                    s = `"${s}"`; // Quote field if special chars
+                }
+                return s;
+            };
+
+            // CSV Rows
+            dataToExport.forEach(item => {
+                // Format timestamp
+                let dateStr = item.timestamp;
+                if (item.timestamp) {
+                     try {
+                        const d = new Date(item.timestamp);
+                        if(!isNaN(d)) dateStr = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
+                     } catch(e){}
+                }
+
+                // Construct Row in correct order
+                const row = [
+                    dateStr, item.section, item.gender,
+                    item.studentLastName, item.studentFirstName, item.studentMiddleName, item.studentSuffix,
+                    item.dobMonth, item.dobDay, item.dobYear,
+                    item.fatherLastName, item.fatherFirstName, item.fatherMiddleName, item.fatherSuffix,
+                    item.motherLastName, item.motherFirstName, item.motherMiddleName,
+                    item.municipality, item.barangay, item.ambition
+                ].map(escape);
+                
+                csvContent += row.join(",") + "\n";
+            });
+
+            // Trigger Download
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            
+            const timestamp = new Date().toISOString().slice(0,10);
+            // Clean filename
+            const cleanFilterName = filterVal.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+            const filename = filterVal === 'all' ? `ONHS_MasterList_${timestamp}.csv` : `ONHS_${cleanFilterName}_${timestamp}.csv`;
+            
+            link.setAttribute("download", filename);
+            document.body.appendChild(link); // Required for Firefox
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Separate function to render table rows
+        function renderLogTable(list) {
+            const tbody = document.getElementById('submissionTableBody');
+            const empty = document.getElementById('emptyState');
+            tbody.innerHTML = '';
+
+            if (list.length === 0) {
+                empty.classList.remove('hidden');
+                // Update empty message based on context
+                const filterVal = document.getElementById('sectionFilter').value;
+                if(filterVal !== 'all') {
+                    empty.querySelector('p').textContent = `No records found for ${filterVal}`;
+                } else {
+                    empty.querySelector('p').textContent = "No records found.";
+                }
+            } else {
+                empty.classList.add('hidden');
+                // We reverse the list to show newest first
+                [...list].reverse().forEach(item => {
+                    const name = item.name || 'Student';
+                    const section = item.section || '-';
+                    
+                    let timeStr = '-';
+                    if (item.timestamp) {
+                        try {
+                            const date = new Date(item.timestamp);
+                            if(!isNaN(date)) {
+                                timeStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                            } else {
+                                timeStr = String(item.timestamp); 
+                            }
+                        } catch(e) { timeStr = '-'; }
+                    }
+
+                    const row = document.createElement('tr');
+                    row.className = 'hover:bg-slate-50 transition-colors group';
+                    row.innerHTML = `
+                        <td class="px-6 py-3 font-bold text-slate-700 group-hover:text-academic-gold transition-colors">${name}</td>
+                        <td class="px-6 py-3 text-slate-500 text-xs font-medium">${section}</td>
+                        <td class="px-6 py-3 text-right text-xs text-slate-400 font-mono whitespace-nowrap">${timeStr}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+        }
+
+        // --- LOCAL RENDER (Legacy Wrapper) ---
+        function renderDashboardStats() {
+            // Fetch local data and pass to shared renderer
+            const list = JSON.parse(localStorage.getItem(submittedKey) || '[]');
+            // Map legacy strings to objects if needed
+            const normalizedList = list.map(item => {
+                if (typeof item === 'string') return { name: item, section: 'Legacy', timestamp: null };
+                return item;
+            });
+            updateDashboardUI(normalizedList);
+        }
+
+    </script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', {'packages':['corechart']});
     </script>
 </body>
 </html>
