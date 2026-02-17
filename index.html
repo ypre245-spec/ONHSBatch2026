@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        academic: {
+                            gold: '#d4af37',
+                            dark: '#1a1a2e',
+                            light: '#fdfbf7'
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 20px 40px -15px rgba(0, 0, 0, 0.1)',
+                        'glow': '0 0 15px rgba(212, 175, 55, 0.3)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        
+        h1, h2, h3, .academic-font { font-family: 'Playfair Display', serif; }
+
+        /* Smooth Step Transitions */
+        .step-content {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .step-content.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Decorative Background Pattern */
+        .bg-pattern {
+            background-color: #111827;
+            background-image: radial-gradient(#d4af37 0.5px, transparent 0.5px), radial-gradient(#d4af37 0.5px, #111827 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Custom Checkbox */
+        .custom-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: white;
+            margin: 0;
+            display: grid;
+            place-content: center;
+            width: 1.5rem;
+            height: 1.5rem;
+            border: 2px solid #cbd5e1;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .custom-checkbox::before {
+            content: "";
+            width: 0.75em;
+            height: 0.75em;
+            transform: scale(0);
+            transition: 120ms transform ease-in-out;
+            box-shadow: inset 1em 1em white;
+            transform-origin: center;
+            clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+        }
+        .custom-checkbox:checked {
+            background-color: #059669;
+            border-color: #059669;
+        }
+        .custom-checkbox:checked::before { transform: scale(1); }
+        .custom-checkbox:focus { 
+            box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1);
+            border-color: #059669;
+        }
+
+        /* Input Styles */
+        .form-input-wrapper {
+            position: relative;
+            transition: all 0.2s;
+        }
+        .form-input-wrapper:focus-within {
+            transform: translateY(-1px);
+        }
+        .form-input-wrapper:focus-within i {
+            color: #d4af37;
+        }
+        
+        input, select, textarea {
+            transition: all 0.2s;
+        }
+        
+        /* Glass effect for modal */
+        .glass-modal {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        /* --- Floating Label Styles --- */
+        .input-group-float { position: relative; }
+        
+        /* Base Input Style for Floating Labels */
+        .floating-input {
+            padding-top: 1.5rem; /* pt-6 */
+            padding-bottom: 0.5rem; /* pb-2 */
+        }
+        
+        /* Base Label Style */
+        .floating-label {
+            position: absolute;
+            pointer-events: none;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: left top;
+            /* Default 'Floated' State (Top) */
+            top: 0.25rem;
+            font-size: 0.65rem; /* roughly text-[10px] */
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #d4af37; /* academic-gold */
+            z-index: 10;
+        }
+
+        /* Input Placeholder Logic (Only for Text Inputs/Textarea) */
+        /* When placeholder is shown (empty), move label down to center */
+        input:placeholder-shown ~ .floating-label,
+        textarea:placeholder-shown ~ .floating-label {
+            top: 1rem; /* Center vertically roughly */
+            font-size: 1rem;
+            font-weight: 500;
+            text-transform: none;
+            letter-spacing: normal;
+            color: #94a3b8; /* slate-400 */
+        }
+
+        /* When focused, force float up regardless of content */
+        input:focus ~ .floating-label,
+        textarea:focus ~ .floating-label,
+        select:focus ~ .floating-label {
+            top: 0.25rem !important;
+            font-size: 0.65rem !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.05em !important;
+            color: #d4af37 !important;
+        }
+
+        /* Selects always keep label floated to avoid overlapping selected text */
+        select ~ .floating-label {
+            top: 0.25rem;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b; /* slate-500 default */
+        }
+        
+        /* Active/Focus color for Select Label */
+        .group:focus-within select ~ .floating-label {
+            color: #d4af37;
+        }
+
+        /* Icon Adjustment for Floating Labels */
+        .has-icon ~ .floating-label { left: 2.75rem; } /* pl-11 equivalent */
+        .no-icon ~ .floating-label { left: 1.25rem; }  /* px-5 equivalent */
+
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-100 to-slate-200 min-h-screen py-6 px-4 md:py-12 flex items-center justify-center">
+
+    <div class="w-full max-w-4xl">
+        
+        <!-- Main Card -->
+        <div class="bg-white rounded-2xl shadow-soft overflow-hidden relative border-t-[6px] border-academic-gold">
+            
+            <!-- Header Section -->
+            <!-- Updated Padding Bottom to pb-24 md:pb-32 (was pb-44 md:pb-48) to reduce negative space -->
+            <div class="bg-pattern p-8 md:p-10 pb-24 md:pb-32 text-white relative overflow-hidden group">
+                <!-- Overlay Gradient for Depth -->
+                <div class="absolute inset-0 bg-gradient-to-br from-slate-900/95 via-slate-900/80 to-academic-dark/95 z-0"></div>
+
+                <!-- Abstract Shapes -->
+                <div class="absolute -top-24 -right-24 w-64 h-64 bg-academic-gold opacity-10 rounded-full blur-3xl animate-pulse"></div>
+                <div class="absolute top-1/2 -left-24 w-48 h-48 bg-blue-500 opacity-5 rounded-full blur-3xl"></div>
+                <div class="absolute bottom-0 right-1/4 w-32 h-32 bg-purple-500 opacity-5 rounded-full blur-2xl"></div>
+
+                <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="text-center md:text-left">
+                        <!-- Icons removed -->
+                        
+                        <h1 class="text-3xl md:text-5xl font-bold tracking-tight text-white mb-3 academic-font drop-shadow-md">
+                            Odiongan National <span class="text-transparent bg-clip-text bg-gradient-to-r from-academic-gold to-amber-200">High School</span>
+                        </h1>
+                        
+                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 text-sm font-medium tracking-wide">
+                            <span class="bg-academic-gold/10 text-academic-gold px-4 py-1.5 rounded-full border border-academic-gold/20 shadow-sm backdrop-blur-sm flex items-center gap-2">
+                                SY 2025-2026
+                            </span>
+                            <span class="hidden md:inline-block w-1.5 h-1.5 rounded-full bg-slate-600"></span>
+                            <span class="text-slate-400 flex items-center gap-2">
+                                Official Records Portal
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Decorative large icon removed -->
+                    <!-- Right Side "Official" Badge removed -->
+                </div>
+            </div>
+
+            <!-- Steps Progress Bar -->
+            <div class="relative -mt-16 px-6 md:px-16 mb-12">
+                <div class="bg-white rounded-2xl shadow-xl p-6 border border-slate-100 relative z-20">
+                    <div class="flex justify-between items-center relative">
+                        <!-- Progress Line Background -->
+                        <div class="absolute left-0 top-1/2 w-full h-1 bg-slate-100 -z-10 rounded-full"></div>
+                        
+                        <!-- Steps -->
+                        <div class="flex flex-col items-center step-indicator group cursor-default" id="ind-1">
+                            <div class="w-12 h-12 rounded-full bg-slate-900 text-academic-gold flex items-center justify-center font-bold text-lg transition-all duration-500 border-4 border-white shadow-lg z-10">1</div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-900 mt-3">Info</span>
+                        </div>
+
+                        <!-- Active Line Segment 1 -->
+                        <div class="flex-1 h-1 mx-2 relative">
+                            <div class="absolute top-0 left-0 h-full bg-academic-gold transition-all duration-700 w-0 rounded-full shadow-glow" id="progress-1"></div>
+                        </div>
+
+                        <div class="flex flex-col items-center step-indicator group cursor-default" id="ind-2">
+                            <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-lg transition-all duration-500 border-4 border-white z-10">2</div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400 mt-3">Family</span>
+                        </div>
+
+                        <!-- Active Line Segment 2 -->
+                        <div class="flex-1 h-1 mx-2 relative">
+                            <div class="absolute top-0 left-0 h-full bg-academic-gold transition-all duration-700 w-0 rounded-full shadow-glow" id="progress-2"></div>
+                        </div>
+
+                        <div class="flex flex-col items-center step-indicator group cursor-default" id="ind-3">
+                            <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-lg transition-all duration-500 border-4 border-white z-10">3</div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400 mt-3">Details</span>
+                        </div>
+
+                         <!-- Active Line Segment 3 -->
+                         <div class="flex-1 h-1 mx-2 relative">
+                            <div class="absolute top-0 left-0 h-full bg-academic-gold transition-all duration-700 w-0 rounded-full shadow-glow" id="progress-3"></div>
+                        </div>
+
+                        <div class="flex flex-col items-center step-indicator group cursor-default" id="ind-4">
+                            <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-lg transition-all duration-500 border-4 border-white z-10">4</div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400 mt-3">Review</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form id="studentForm" class="px-6 md:px-16 pb-12" novalidate>
+                
+                <!-- STEP 1: Student Information -->
+                <div id="step-1" class="step-content active space-y-8">
+                    <div class="border-b border-slate-100 pb-4">
+                        <h2 class="text-2xl md:text-3xl font-bold text-slate-800 academic-font">Student Information</h2>
+                        <p class="text-slate-500 mt-1">Please enter the student's personal details correctly.</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="input-group-float group">
+                            <div class="relative">
+                                <i class="fas fa-users absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors z-20"></i>
+                                <select name="section" required class="has-icon floating-input w-full pl-11 pr-4 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none appearance-none font-medium text-slate-700 cursor-pointer">
+                                    <option value="" disabled selected>Select Section</option>
+                                    <option value="ABM 1">ABM 1</option>
+                                    <option value="ABM 2">ABM 2</option>
+                                    <option value="ALS">ALS</option>
+                                    <option value="ARTS AND DESIGN">ARTS AND DESIGN</option>
+                                    <option value="HUMSS 1">HUMSS 1</option>
+                                    <option value="HUMSS 2">HUMSS 2</option>
+                                    <option value="HUMSS 3">HUMSS 3</option>
+                                    <option value="HUMSS 4">HUMSS 4</option>
+                                    <option value="HUMSS 5">HUMSS 5</option>
+                                    <option value="SPORTS TRACK">SPORTS TRACK</option>
+                                    <option value="STEM 1">STEM 1</option>
+                                    <option value="STEM 2">STEM 2</option>
+                                    <option value="STEM 3">STEM 3</option>
+                                    <option value="TVL - BREAD AND PASTRY">TVL - BREAD AND PASTRY</option>
+                                    <option value="TVL - EIM">TVL - EIM</option>
+                                    <option value="TVL - FOOD PRO">TVL - FOOD PRO</option>
+                                    <option value="TVL - ICT">TVL - ICT</option>
+                                </select>
+                                <label class="floating-label">Section <span class="text-red-500">*</span></label>
+                                <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-xs text-slate-400 pointer-events-none"></i>
+                            </div>
+                        </div>
+                        <div class="input-group-float group">
+                            <div class="relative">
+                                <i class="fas fa-venus-mars absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors z-20"></i>
+                                <select name="gender" id="genderSelect" onchange="toggleSuffix()" required class="has-icon floating-input w-full pl-11 pr-4 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none appearance-none font-medium text-slate-700 cursor-pointer">
+                                    <option value="" disabled selected>Select Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                                <label class="floating-label">Gender <span class="text-red-500">*</span></label>
+                                <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-xs text-slate-400 pointer-events-none"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Moved Date of Birth Section Up -->
+                    <div class="form-input-wrapper bg-slate-50 p-6 rounded-2xl border border-slate-200/60 relative">
+                        <div class="flex justify-between items-end mb-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide">Date of Birth <span class="text-red-500">*</span></label>
+                                <p class="text-[10px] text-slate-400 mt-1">Age will calculate automatically.</p>
+                            </div>
+                            <span id="calculatedAge" class="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-100 px-3 py-1 rounded-full hidden shadow-sm animate-pulse">Age: --</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-3">
+                            <div class="input-group-float group relative">
+                                <select name="dobMonth" id="dobMonth" onchange="calculateAge()" required class="floating-input w-full px-4 bg-white border border-slate-200 rounded-xl focus:bg-white focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none text-slate-700 font-medium">
+                                    <option value="" disabled selected>Select</option>
+                                    <option value="January">January</option>
+                                    <option value="February">February</option>
+                                    <option value="March">March</option>
+                                    <option value="April">April</option>
+                                    <option value="May">May</option>
+                                    <option value="June">June</option>
+                                    <option value="July">July</option>
+                                    <option value="August">August</option>
+                                    <option value="September">September</option>
+                                    <option value="October">October</option>
+                                    <option value="November">November</option>
+                                    <option value="December">December</option>
+                                </select>
+                                <label class="floating-label left-4 text-slate-400">Month</label>
+                            </div>
+                            <div class="input-group-float group relative">
+                                <input type="number" name="dobDay" id="dobDay" onchange="calculateAge()" placeholder=" " min="1" max="31" required class="no-icon floating-input w-full px-4 bg-white border border-slate-200 rounded-xl focus:bg-white focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none text-center text-slate-700 font-medium placeholder-transparent">
+                                <label class="floating-label left-4 text-center w-full pr-8">Day</label>
+                            </div>
+                            <div class="input-group-float group relative">
+                                <input type="number" name="dobYear" id="dobYear" onchange="calculateAge()" placeholder=" " min="1950" max="2030" required class="no-icon floating-input w-full px-4 bg-white border border-slate-200 rounded-xl focus:bg-white focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none text-center text-slate-700 font-medium placeholder-transparent">
+                                <label class="floating-label left-4 text-center w-full pr-8">Year</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-slate-50 to-white p-8 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-academic-gold/10 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
+                        
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-6 relative z-10">Official Name <span class="text-slate-400 font-normal normal-case ml-1 italic">(Match Birth Certificate)</span></label>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 relative z-10">
+                            <!-- Student Last Name -->
+                            <div class="input-group-float group relative">
+                                <input type="text" name="studentLastName" placeholder=" " required onblur="formatInput(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-white font-medium text-slate-800 placeholder-transparent">
+                                <label class="floating-label">Last Name</label>
+                            </div>
+                            <!-- Student First Name -->
+                            <div class="input-group-float group relative">
+                                <input type="text" name="studentFirstName" placeholder=" " required onblur="formatInput(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-white font-medium text-slate-800 placeholder-transparent">
+                                <label class="floating-label">First Name</label>
+                            </div>
+                            <!-- Student Middle Name -->
+                            <div class="input-group-float group relative">
+                                <input type="text" name="studentMiddleName" placeholder=" " onblur="validateMiddleName(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-white font-medium text-slate-800 placeholder-transparent">
+                                <label class="floating-label">Middle Name</label>
+                            </div>
+                            <!-- Student Suffix -->
+                            <div class="input-group-float group relative" id="studentSuffixWrapper">
+                                <select name="studentSuffix" id="studentSuffixInput" class="floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-white font-medium text-slate-800 hidden">
+                                    <option value="" selected>Suffix (None)</option>
+                                    <option value="Jr.">Jr.</option>
+                                    <option value="Sr.">Sr.</option>
+                                    <option value="I.">I.</option>
+                                    <option value="II.">II.</option>
+                                    <option value="III.">III.</option>
+                                </select>
+                                <label id="studentSuffixLabel" class="floating-label left-5 hidden">Suffix</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- STEP 2: Family Background -->
+                <div id="step-2" class="step-content space-y-8">
+                    <div class="border-b border-slate-100 pb-4">
+                        <h2 class="text-2xl md:text-3xl font-bold text-slate-800 academic-font">Family Background</h2>
+                        <p class="text-slate-500 mt-1">Parental information for school records.</p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center text-slate-800 mb-2">
+                            <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mr-3 border border-blue-100">
+                                <i class="fas fa-male text-lg"></i>
+                            </div>
+                            <span class="font-bold academic-font text-xl">Father's Name</span>
+                            <span class="ml-3 text-[10px] uppercase font-bold tracking-wider bg-slate-100 text-slate-500 px-2 py-1 rounded">Optional</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pl-0 md:pl-14">
+                            <!-- Father Last -->
+                            <div class="input-group-float group relative">
+                                <input type="text" name="fatherLastName" placeholder=" " onblur="formatInput(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-slate-50 focus:bg-white transition-all placeholder-transparent">
+                                <label class="floating-label">Last Name</label>
+                            </div>
+                            <!-- Father First -->
+                            <div class="input-group-float group relative">
+                                <input type="text" name="fatherFirstName" placeholder=" " onblur="formatInput(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-slate-50 focus:bg-white transition-all placeholder-transparent">
+                                <label class="floating-label">First Name</label>
+                            </div>
+                            <!-- Father Middle -->
+                            <div class="input-group-float group relative">
+                                <input type="text" name="fatherMiddleName" placeholder=" " onblur="validateMiddleName(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-slate-50 focus:bg-white transition-all placeholder-transparent">
+                                <label class="floating-label">Middle Name</label>
+                            </div>
+                            <!-- Father Suffix -->
+                            <div class="input-group-float group relative">
+                                <select name="fatherSuffix" class="floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-slate-50 focus:bg-white transition-all">
+                                    <option value="">Suffix (None)</option>
+                                    <option value="Jr.">Jr.</option>
+                                    <option value="Sr.">Sr.</option>
+                                    <option value="I.">I.</option>
+                                    <option value="II.">II.</option>
+                                    <option value="III.">III.</option>
+                                </select>
+                                <label class="floating-label left-5">Suffix</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-100 pt-8 space-y-4">
+                        <div class="flex items-center text-slate-800 mb-2">
+                            <div class="w-10 h-10 rounded-full bg-pink-50 text-pink-600 flex items-center justify-center mr-3 border border-pink-100">
+                                <i class="fas fa-female text-lg"></i>
+                            </div>
+                            <span class="font-bold academic-font text-xl">Mother's Name</span>
+                            <span class="ml-3 text-[10px] uppercase font-bold tracking-wider bg-slate-100 text-slate-500 px-2 py-1 rounded">Optional</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pl-0 md:pl-14">
+                            <!-- Mother Last -->
+                            <div class="input-group-float group relative">
+                                <input type="text" name="motherLastName" placeholder=" " onblur="formatInput(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-slate-50 focus:bg-white transition-all placeholder-transparent">
+                                <label class="floating-label">Last Name</label>
+                            </div>
+                            <!-- Mother First -->
+                            <div class="input-group-float group relative">
+                                <input type="text" name="motherFirstName" placeholder=" " onblur="formatInput(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-slate-50 focus:bg-white transition-all placeholder-transparent">
+                                <label class="floating-label">First Name</label>
+                            </div>
+                            <!-- Mother Middle -->
+                            <div class="input-group-float group relative">
+                                <input type="text" name="motherMiddleName" placeholder=" " onblur="validateMiddleName(this)" class="no-icon floating-input w-full px-5 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none bg-slate-50 focus:bg-white transition-all placeholder-transparent">
+                                <label class="floating-label">Middle Name</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: Location & Details -->
+                <div id="step-3" class="step-content space-y-8">
+                     <div class="border-b border-slate-100 pb-4">
+                        <h2 class="text-2xl md:text-3xl font-bold text-slate-800 academic-font">Location & Ambitions</h2>
+                        <p class="text-slate-500 mt-1">Residential details and career path.</p>
+                    </div>
+                    
+                    <div class="bg-amber-50/50 border border-amber-100 rounded-xl p-5 mb-6 flex items-start shadow-sm">
+                        <i class="fas fa-info-circle text-academic-gold mt-0.5 mr-3 text-lg"></i>
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-800">Address Information</h4>
+                            <p class="text-xs text-slate-600 mt-0.5">Please select your current municipality and barangay within Romblon province.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="input-group-float group">
+                            <div class="relative">
+                                <i class="fas fa-map-marked-alt absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 z-20"></i>
+                                <select name="municipality" id="municipalitySelect" onchange="updateBarangays()" required class="has-icon floating-input w-full pl-11 pr-4 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none appearance-none transition-all cursor-pointer font-medium text-slate-700">
+                                    <option value="" disabled selected>Select Municipality</option>
+                                    <option value="Alcantara">Alcantara</option>
+                                    <option value="Banton">Banton</option>
+                                    <option value="Cajidiocan">Cajidiocan</option>
+                                    <option value="Calatrava">Calatrava</option>
+                                    <option value="Concepcion">Concepcion</option>
+                                    <option value="Corcuera">Corcuera</option>
+                                    <option value="Ferrol">Ferrol</option>
+                                    <option value="Looc">Looc</option>
+                                    <option value="Magdiwang">Magdiwang</option>
+                                    <option value="Odiongan">Odiongan</option>
+                                    <option value="Romblon">Romblon</option>
+                                    <option value="San Agustin">San Agustin</option>
+                                    <option value="San Andres">San Andres</option>
+                                    <option value="San Fernando">San Fernando</option>
+                                    <option value="San Jose">San Jose</option>
+                                    <option value="Santa Fe">Santa Fe</option>
+                                    <option value="Santa Maria">Santa Maria</option>
+                                </select>
+                                <label class="floating-label">Municipality <span class="text-red-500">*</span></label>
+                                <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-xs text-slate-400 pointer-events-none"></i>
+                            </div>
+                        </div>
+                        <div class="input-group-float group">
+                            <div class="relative">
+                                <i class="fas fa-map-pin absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 z-20"></i>
+                                <select name="barangay" id="barangaySelect" required class="has-icon floating-input w-full pl-11 pr-4 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none appearance-none transition-all cursor-pointer font-medium text-slate-700 disabled:bg-gray-100 disabled:text-gray-400" disabled>
+                                    <option value="" disabled selected>Select Municipality First</option>
+                                </select>
+                                <label class="floating-label">Barangay <span class="text-red-500">*</span></label>
+                                <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-xs text-slate-400 pointer-events-none"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group-float group relative mt-4">
+                        <i class="fas fa-star absolute top-5 left-4 text-academic-gold z-20"></i>
+                        <textarea name="ambition" id="ambitionInput" maxlength="45" rows="3" required onblur="formatAmbition(this)" oninput="document.getElementById('ambitionCount').textContent = this.value.length + '/30'" placeholder=" " class="has-icon floating-input w-full pl-11 pr-4 border border-slate-200 rounded-xl focus:border-academic-gold focus:ring-4 focus:ring-academic-gold/10 outline-none resize-none bg-slate-50 focus:bg-white font-medium text-slate-700 placeholder-transparent"></textarea>
+                        <label class="floating-label">Ambition / Future Goal <span class="text-red-500">*</span></label>
+                        <div id="ambitionCount" class="text-right text-[10px] text-slate-400 mt-1 font-medium tracking-wide">0/45</div>
+                    </div>
+                </div>
+
+                <!-- STEP 4: Review & Submit -->
+                <div id="step-4" class="step-content space-y-8">
+                    <div class="border-b border-slate-100 pb-4">
+                        <h2 class="text-2xl md:text-3xl font-bold text-slate-800 academic-font">Review Information</h2>
+                        <p class="text-slate-500 mt-1">Verify your information before official submission.</p>
+                    </div>
+
+                    <!-- ID Card Style Review -->
+                    <div class="bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden relative">
+                        <!-- Top Accent -->
+                        <div class="h-2 bg-gradient-to-r from-slate-900 via-academic-gold to-slate-900"></div>
+                        
+                        <div class="p-8 relative z-10">
+                             <!-- Background Seal -->
+                            <div class="absolute right-0 bottom-0 opacity-5 pointer-events-none transform translate-x-1/4 translate-y-1/4">
+                                <i class="fas fa-seal text-[12rem] text-slate-900"></i>
+                            </div>
+
+                            <div class="flex items-center gap-4 mb-8">
+                                <div class="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center border-2 border-academic-gold shadow-sm text-slate-400">
+                                    <i class="fas fa-user text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-slate-900 academic-font" id="reviewName">--</h3>
+                                    <p class="text-sm font-medium text-academic-gold" id="reviewSection">--</p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                                <div class="space-y-4">
+                                    <div>
+                                        <span class="block text-[10px] text-slate-400 uppercase tracking-wider font-bold mb-1">Date of Birth</span>
+                                        <span class="font-semibold text-slate-700 border-b border-slate-100 pb-1 block" id="reviewDOB">--</span>
+                                    </div>
+                                    <div>
+                                        <span class="block text-[10px] text-slate-400 uppercase tracking-wider font-bold mb-1">Gender</span>
+                                        <span class="font-semibold text-slate-700 border-b border-slate-100 pb-1 block" id="reviewGender">--</span>
+                                    </div>
+                                     <div>
+                                        <span class="block text-[10px] text-slate-400 uppercase tracking-wider font-bold mb-1">Address</span>
+                                        <span class="font-semibold text-slate-700 border-b border-slate-100 pb-1 block" id="reviewAddress">--</span>
+                                    </div>
+                                </div>
+                                <div class="space-y-4">
+                                     <div>
+                                        <span class="block text-[10px] text-slate-400 uppercase tracking-wider font-bold mb-1">Father's Name</span>
+                                        <span class="font-semibold text-slate-700 border-b border-slate-100 pb-1 block" id="reviewFather">--</span>
+                                    </div>
+                                     <div>
+                                        <span class="block text-[10px] text-slate-400 uppercase tracking-wider font-bold mb-1">Mother's Name</span>
+                                        <span class="font-semibold text-slate-700 border-b border-slate-100 pb-1 block" id="reviewMother">--</span>
+                                    </div>
+                                     <div>
+                                        <span class="block text-[10px] text-slate-400 uppercase tracking-wider font-bold mb-1">Ambition</span>
+                                        <span class="font-medium text-slate-700 italic" id="reviewAmbition">--</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Bottom Bar -->
+                        <div class="bg-slate-50 p-3 text-center border-t border-slate-100">
+                            <span class="text-[10px] text-slate-400 uppercase tracking-widest">Official Registration Preview</span>
+                        </div>
+                    </div>
+
+                    <!-- Privacy Consent -->
+                    <label class="relative block bg-white p-5 rounded-xl border border-slate-200 shadow-sm cursor-pointer group hover:border-academic-gold transition-all duration-300" id="consentContainer">
+                         <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 pt-1">
+                                 <input id="privacyConsent" name="privacyConsent" type="checkbox" required class="custom-checkbox" onchange="toggleConsentVisuals()">
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-800 mb-1">Data Privacy Agreement</h4>
+                                <p class="text-xs text-slate-500 leading-relaxed group-hover:text-slate-600 transition-colors">
+                                    I hereby certify that the information provided is true and correct. I consent to the processing of my personal data for school records in accordance with the Data Privacy Act.
+                                </p>
+                                <div id="consentText" class="mt-3 text-xs font-bold text-slate-400 uppercase tracking-wide transition-colors">
+                                    Checking this box serves as your signature
+                                </div>
+                            </div>
+                         </div>
+                    </label>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="mt-12 pt-8 border-t border-slate-100 flex justify-between items-center">
+                    <button type="button" id="prevBtn" onclick="changeStep(-1)" class="hidden group text-slate-400 font-medium hover:text-slate-700 px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
+                        <i class="fas fa-arrow-left text-sm group-hover:-translate-x-1 transition-transform"></i> Previous
+                    </button>
+                    <div class="flex-1"></div>
+                    
+                    <button type="button" id="nextBtn" onclick="changeStep(1)" class="bg-slate-900 hover:bg-slate-800 text-academic-gold font-bold tracking-wide py-4 px-10 rounded-xl shadow-lg shadow-slate-900/20 transform transition-all hover:-translate-y-1 hover:shadow-xl flex items-center gap-3 group">
+                        NEXT STEP <i class="fas fa-chevron-right text-xs group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                    
+                    <button type="submit" id="submitBtn" class="hidden bg-gradient-to-r from-academic-gold to-amber-600 hover:to-amber-500 text-white font-bold tracking-wide py-4 px-10 rounded-xl shadow-lg shadow-amber-500/30 transform transition-all hover:-translate-y-1 hover:shadow-xl flex items-center gap-3">
+                        SUBMIT RECORD <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+
+                <!-- Status Messages -->
+                <div id="statusMessage" class="hidden mt-6 mx-auto p-4 rounded-xl text-center text-sm max-w-md border shadow-sm"></div>
+                
+                <!-- Hidden Config Removed -->
+
+            </form>
+        </div>
+        
+        <div class="text-center text-slate-400 text-xs mt-8 mb-12 flex justify-center items-center gap-3 font-medium">
+            <span class="opacity-50">ONHS Batch 2025 - 2026 Official Registration System</span>
+            <span class="w-1 h-1 bg-slate-300 rounded-full"></span>
+            <span id="autoSaveStatus" class="text-emerald-600 opacity-0 transition-opacity duration-500 flex items-center gap-1">
+                <i class="fas fa-check-circle"></i> Draft saved
+            </span>
+        </div>
+    </div>
+
+    <!-- Official Success Modal -->
+    <div id="successModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300">
+        <div id="successModalContent" class="glass-modal w-full max-w-lg rounded-2xl shadow-2xl transform scale-95 opacity-0 transition-all duration-300 mx-4 relative overflow-hidden flex flex-col max-h-[90vh] border border-white/50">
+            
+            <!-- Confetti Decoration (CSS only representation) -->
+            <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0 opacity-50">
+                <div class="absolute top-10 left-10 w-2 h-2 bg-red-400 rounded-full"></div>
+                <div class="absolute top-20 right-20 w-3 h-3 bg-blue-400 transform rotate-45"></div>
+                <div class="absolute bottom-32 left-1/4 w-2 h-2 bg-yellow-400 rounded-full"></div>
+            </div>
+
+            <div class="bg-slate-900 h-2 w-full"></div>
+            
+            <div class="p-8 text-center relative z-10 flex-1 overflow-y-auto custom-scrollbar">
+                <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-glow border-4 border-slate-50 relative" id="modalIconContainer">
+                     <div class="absolute inset-0 rounded-full border border-slate-100"></div>
+                    <i class="fas fa-check-circle text-5xl text-emerald-500" id="modalIcon"></i>
+                </div>
+                
+                <h2 class="text-3xl font-bold academic-font text-slate-800 mb-2" id="modalTitle">Registration Complete</h2>
+                <p class="text-slate-500 text-sm font-medium mb-8" id="modalSubtitle">Your record has been successfully submitted.</p>
+
+                <!-- Detailed Data Display -->
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 text-left mb-8 shadow-inner" id="modalDataContainer">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-3 mb-4">
+                         <span class="text-xs text-slate-400 uppercase font-bold tracking-wider">Reference No.</span>
+                         <span class="font-mono font-bold text-academic-gold bg-slate-900 px-3 py-1 rounded text-sm" id="modalRef">--</span>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Student Profile -->
+                        <div>
+                             <h4 class="text-[10px] font-bold text-academic-gold uppercase tracking-widest mb-3 border-b border-slate-100 pb-1">Student Profile</h4>
+                             <div class="space-y-3">
+                                <div>
+                                    <p class="text-[10px] text-slate-400 uppercase font-bold mb-0.5">Full Name</p>
+                                    <p class="text-base font-bold text-slate-800" id="modalStudentName">--</p>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p class="text-[10px] text-slate-400 uppercase font-bold mb-0.5">Section</p>
+                                        <p class="text-sm font-medium text-slate-700" id="modalSection">--</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] text-slate-400 uppercase font-bold mb-0.5">Gender</p>
+                                        <p class="text-sm font-medium text-slate-700" id="modalGender">--</p>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                     <div>
+                                        <p class="text-[10px] text-slate-400 uppercase font-bold mb-0.5">Date of Birth</p>
+                                        <p class="text-sm font-medium text-slate-700" id="modalDOB">--</p>
+                                    </div>
+                                     <div>
+                                        <p class="text-[10px] text-slate-400 uppercase font-bold mb-0.5">Age</p>
+                                        <p class="text-sm font-medium text-slate-700" id="modalAge">--</p>
+                                    </div>
+                                </div>
+                             </div>
+                        </div>
+
+                        <!-- Family Background -->
+                        <div>
+                            <h4 class="text-[10px] font-bold text-academic-gold uppercase tracking-widest mb-3 border-b border-slate-100 pb-1">Family Background</h4>
+                            <div class="space-y-3">
+                                <div>
+                                    <p class="text-[10px] text-slate-400 uppercase font-bold mb-0.5">Father's Name</p>
+                                    <p class="text-sm font-medium text-slate-700" id="modalFather">--</p>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] text-slate-400 uppercase font-bold mb-0.5">Mother's Name</p>
+                                    <p class="text-sm font-medium text-slate-700" id="modalMother">--</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Details -->
+                        <div>
+                             <h4 class="text-[10px] font-bold text-academic-gold uppercase tracking-widest mb-3 border-b border-slate-100 pb-1">Location & Ambition</h4>
+                             <div class="space-y-3">
+                                <div>
+                                    <p class="text-[10px] text-slate-400 uppercase font-bold mb-0.5">Address</p>
+                                    <p class="text-sm font-medium text-slate-700" id="modalAddress">--</p>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] text-slate-400 uppercase font-bold mb-0.5">Ambition</p>
+                                    <p class="text-sm font-medium text-slate-700 italic" id="modalAmbition">--</p>
+                                </div>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="closeModalBtn" onclick="closeModal()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded-xl shadow-lg transition transform hover:-translate-y-1">
+                    Done & Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA & CONFIG ---
+        let currentStep = 1;
+        const totalSteps = 4; // Info, Family, Details, Review
+        const draftKey = 'studentFormDraft_v2'; // Reverted key
+        const submittedKey = 'submittedStudents_v1'; // Key for client-side duplicate check
+
+        const barangayData = {
+            "Alcantara": ["Bonlao", "Calagonsao", "Camili", "Comod-om", "Madalag", "Poblacion", "San Isidro", "Tugdan", "Bagsik", "Gui-ob", "Lawan", "San Roque"],
+            "Banton": ["Balogo", "Banice", "Hambi-an", "Lagang", "Libtong", "Mainit", "Nabalay", "Nasunogan", "Poblacion", "Sibay", "Tan-Ag", "Toctoc", "Togbongan", "Togong", "Tungonan", "Tumalum", "Yabawon"],
+            "Cajidiocan": ["Alibagon", "Cambajao", "Cambalo", "Cambijang", "Cantagda", "Danao", "Gutivan", "Lico", "Lumbang Este", "Lumbang Weste", "Marigondon", "Poblacion", "Sugod", "Taguilos"],
+            "Calatrava": ["Balogo", "Linao", "Poblacion", "Pagsangahan", "Pangulo", "San Roque", "Talisay"],
+            "Concepcion": ["Bachawan", "Calabasahan", "Dalajican", "Masudsud", "Poblacion", "Sampong", "San Pedro (Agbatang)", "San Vicente", "Masadya"],
+            "Corcuera": ["Alegria", "Ambulong", "Colongcolong", "Gobon", "Guintiguiban", "Ilijan", "Labnig", "Mabini", "Mahaba", "Mangansag", "Poblacion", "San Agustin", "San Roque", "San Vicente", "Tacasan"],
+            "Ferrol": ["Agnonoc", "Bunsoran", "Claro M. Recto", "Poblacion", "Hinaguman", "Tubigon"],
+            "Looc": ["Agojo", "Balatucan", "Buenavista", "Camandag", "Guinhaya-an", "Limon Norte", "Limon Sur", "Manhac", "Pili", "Poblacion", "Punta", "Tuguis"],
+            "Magdiwang": ["Agsao", "Agutay", "Ambulong", "Dulangan", "Ipil", "Jao-asan", "Poblacion", "Silum", "Tampayan"],
+            "Odiongan": ["Amatong", "Anahao", "Bangon", "Batiano", "Budiong", "Canduyong", "Dapawan", "Gabawan", "Libertad", "Ligaya", "Liwanag", "Liwayway", "Malilico", "Mayha", "Panique", "Pato-o", "Poctoy", "Progreso Este", "Progreso Weste", "Rizal", "Tabing Dagat", "Tabobo-an", "Tuburan", "Tumingad", "Tulay"],
+            "Romblon": ["Agbaluto", "Agpanabat", "Agbudia", "Agnaga", "Agnay", "Agnipa", "Agtongo", "Alad", "Bagacay", "Cajimos", "Calabogo", "Capaclan", "Ginablan", "Guimpingan", "Ilauran", "Lamao", "Li-o", "Logbon", "Lunas", "Lonos", "Macalas", "Mapula", "Cobrador (Naguso)", "Palje", "Barangay I (Poblacion)", "Barangay II (Poblacion)", "Barangay III (Poblacion)", "Barangay IV (Poblacion)", "Sablayan", "Sawang", "Tambac"],
+            "San Agustin": ["Bachawan", "Binonga-an", "Buli", "Cabolutan", "Cagbo-aya", "Camantaya", "Carmen", "Cawayan", "Doña Juana", "Dubduban", "Hinugusan", "Lusong", "Mahabangbaybay", "Poblacion", "Sugod"],
+            "San Andres": ["Agpudlos", "Calunacon", "Doña Trinidad Roxas", "Juncarlo", "Linawan", "Mabini", "Marigondon Norte", "Marigondon Sur", "Matutuna", "Pag-Alad", "Poblacion", "Tan-Agan", "Victoria"],
+            "San Fernando": ["Agtiwa", "Azagra", "Campalingo", "Canjalon", "España", "Mabini", "Mabulo", "Otod", "Panangcalan", "Pili", "Poblacion", "Taclobo"],
+            "San Jose": ["Busay", "Combot", "Lanas", "Pinamihagan", "Poblacion"],
+            "Santa Fe": ["Agmanic", "Canyayo", "Danao Norte", "Danao Sur", "Guinbirayan", "Guintigbasan", "Magsaysay", "Mat-i", "Pandan", "Poblacion", "Tabugon"],
+            "Santa Maria": ["Bonga", "Concepcion Norte (Poblacion)", "Concepcion Sur", "Paroyhog", "Santo Niño", "San Isidro"]
+        };
+
+        // --- TITLE CASE UTILITIES ---
+
+        function toTitleCase(str) {
+            if (!str) return '';
+            return str.replace(/\w\S*/g, function(txt) {
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            });
+        }
+
+        function formatInput(input) {
+            if (input.value) {
+                input.value = toTitleCase(input.value);
+                saveDraft(); // Ensure formatted value is saved
+            }
+        }
+        
+        function validateMiddleName(input) {
+            if (!input.value) {
+                // Empty allowed
+                input.setCustomValidity("");
+                input.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
+                saveDraft();
+                return;
+            }
+
+            // Title Case first
+            input.value = toTitleCase(input.value);
+
+            // Check for Initial (Single letter or Letter+Dot)
+            // Regex matches "A" or "A."
+            const regex = /^[a-zA-Z]\.?$/;
+            
+            if (regex.test(input.value)) {
+                input.setCustomValidity("Please enter the full Middle Name, not just an initial.");
+                input.reportValidity(); // Shows browser tooltip
+                
+                // Visual Error State
+                input.classList.add('border-red-500', 'ring-1', 'ring-red-500');
+                
+                // Shake effect
+                input.parentElement.animate([
+                    { transform: 'translateX(0)' },
+                    { transform: 'translateX(-5px)' },
+                    { transform: 'translateX(5px)' },
+                    { transform: 'translateX(0)' }
+                ], { duration: 300 });
+            } else {
+                input.setCustomValidity("");
+                input.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
+                saveDraft();
+            }
+        }
+        
+        function formatAmbition(input) {
+             let val = input.value.trim();
+             if (!val) return;
+             
+             // 1. Remove common conversational prefixes (e.g. "I want to be")
+             const prefixRegex = /^(i\s+(want|would\s+like)\s+to\s+(be|become))\s+/i;
+             val = val.replace(prefixRegex, "");
+
+             // 2. Check if it already starts with "To be" or "To become"
+             const openerRegex = /^(to\s+be\s+|to\s+become\s+)/i;
+             
+             let finalVal = val;
+
+             if (!openerRegex.test(val)) {
+                 // 3. If not, prepend "To become "
+                 // Handle cases where user typed "A doctor" -> "To become a doctor" (fix capitalization of 'A')
+                 if (/^(a|an)\s+/i.test(val)) {
+                     finalVal = "To become " + val.charAt(0).toLowerCase() + val.slice(1);
+                 } else {
+                     finalVal = "To become " + val;
+                 }
+             }
+             
+             // 4. Enforce 30 Character Limit (Strict)
+             if (finalVal.length > 30) {
+                 // If adding "To become" makes it too long, try just "To be"
+                 finalVal = finalVal.replace("To become", "To be");
+                 
+                 // If still too long, revert to original user input (better to have correct word than cut off sentence)
+                 if (finalVal.length > 30) {
+                     finalVal = val;
+                 }
+                 
+                 // If original user input was somehow > 30 (shouldn't happen due to maxlength), truncate
+                 if (finalVal.length > 30) {
+                     finalVal = finalVal.substring(0, 30);
+                 }
+             }
+
+             // 5. Ensure Sentence Case
+             finalVal = finalVal.charAt(0).toUpperCase() + finalVal.slice(1);
+             
+             input.value = finalVal;
+             
+             // Update Counter
+             const counter = document.getElementById('ambitionCount');
+             if(counter) counter.textContent = finalVal.length + '/30';
+
+             saveDraft();
+        }
+
+        // --- WIZARD LOGIC ---
+
+        function showStep(step) {
+            // Validate before moving forward
+            if (step > currentStep) {
+                if (!validateStep(currentStep)) return;
+            }
+
+            // Prepare Review Step data if we are entering step 4
+            if (step === 4) {
+                populateReview();
+            }
+
+            // Hide all steps
+            document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(`step-${step}`).classList.add('active');
+
+            // Update Indicators
+            for (let i = 1; i <= totalSteps; i++) {
+                const indicator = document.getElementById(`ind-${i}`).querySelector('div');
+                const label = document.getElementById(`ind-${i}`).querySelector('span');
+                const line = document.getElementById(`progress-${i-1}`); // Previous line
+
+                if (i <= step) {
+                    indicator.classList.remove('bg-slate-100', 'text-slate-400', 'border-white');
+                    indicator.classList.add('bg-slate-900', 'text-academic-gold', 'border-white');
+                    label.classList.add('text-slate-900');
+                    label.classList.remove('text-slate-400');
+                    if (line) line.classList.remove('w-0');
+                    if (line) line.classList.add('w-full');
+                } else {
+                    indicator.classList.add('bg-slate-100', 'text-slate-400', 'border-white');
+                    indicator.classList.remove('bg-slate-900', 'text-academic-gold', 'border-white');
+                    label.classList.remove('text-slate-900');
+                    label.classList.add('text-slate-400');
+                    if (line) line.classList.remove('w-full');
+                    if (line) line.classList.add('w-0');
+                }
+            }
+
+            // Update Buttons
+            document.getElementById('prevBtn').classList.toggle('hidden', step === 1);
+            if (step === totalSteps) {
+                document.getElementById('nextBtn').classList.add('hidden');
+                document.getElementById('submitBtn').classList.remove('hidden');
+            } else {
+                document.getElementById('nextBtn').classList.remove('hidden');
+                document.getElementById('submitBtn').classList.add('hidden');
+            }
+
+            currentStep = step;
+            window.scrollTo(0, 0);
+        }
+
+        function changeStep(n) {
+            showStep(currentStep + n);
+        }
+        
+        // VISUAL FEEDBACK FOR CONSENT
+        function toggleConsentVisuals() {
+            const checkbox = document.getElementById('privacyConsent');
+            const container = document.getElementById('consentContainer');
+            const text = document.getElementById('consentText');
+
+            // Always remove error states first
+            container.classList.remove('bg-red-50', 'border-red-300', 'ring-1', 'ring-red-300');
+
+            if (checkbox.checked) {
+                // Active/Signed State
+                container.classList.remove('bg-white', 'border-slate-200');
+                container.classList.add('bg-emerald-50', 'border-emerald-500', 'ring-1', 'ring-emerald-500');
+                text.classList.remove('text-slate-400');
+                text.classList.add('text-emerald-700', 'font-bold');
+                text.innerHTML = 'Consent Accepted <i class="fas fa-check-circle ml-1"></i>';
+            } else {
+                // Default State
+                container.classList.add('bg-white', 'border-slate-200');
+                container.classList.remove('bg-emerald-50', 'border-emerald-500', 'ring-1', 'ring-emerald-500');
+                text.classList.add('text-slate-400');
+                text.classList.remove('text-emerald-700', 'font-bold');
+                text.innerText = 'Checking this box serves as your signature';
+            }
+        }
+
+        function validateStep(step) {
+            const container = document.getElementById(`step-${step}`);
+            // Select all inputs to check (not just required ones)
+            const inputs = container.querySelectorAll('input, select, textarea');
+            let isValid = true;
+            
+            inputs.forEach(input => {
+                // Remove existing listener to avoid stacking
+                input.removeEventListener('input', handleInputValidation);
+                input.addEventListener('input', handleInputValidation);
+
+                if (input.type === 'checkbox') {
+                    const parent = document.getElementById('consentContainer');
+                    if (input.hasAttribute('required') && !input.checked) {
+                        isValid = false;
+                        parent.classList.remove('bg-white', 'border-slate-200', 'bg-emerald-50', 'border-emerald-500');
+                        parent.classList.add('bg-red-50', 'border-red-300');
+                        // Animation
+                        parent.animate([
+                            { transform: 'translateX(0)' },
+                            { transform: 'translateX(-5px)' },
+                            { transform: 'translateX(5px)' },
+                            { transform: 'translateX(0)' }
+                        ], { duration: 300 });
+                    }
+                } else {
+                    // checkValidity() covers: required, type mismatch, AND customValidity (from middle name check)
+                    // But we want to explicitly handle 'required' empty logic to add visuals
+                    if (!input.checkValidity()) {
+                         isValid = false;
+                         input.classList.add('border-red-500', 'ring-1', 'ring-red-500');
+                         
+                         // Shake if it's the specific error
+                         input.parentElement.animate([
+                            { transform: 'translateX(0)' },
+                            { transform: 'translateX(-5px)' },
+                            { transform: 'translateX(5px)' },
+                            { transform: 'translateX(0)' }
+                        ], { duration: 300 });
+                        
+                        // Show tooltip if it has a custom error (like middle name)
+                        if (input.validationMessage) {
+                            input.reportValidity();
+                        }
+                    } else {
+                        input.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
+                    }
+                }
+            });
+            return isValid;
+        }
+
+        // Shared event handler for input validation cleanup
+        function handleInputValidation(e) {
+            const input = e.target;
+            if(input.type === 'checkbox') {
+                const p = document.getElementById('consentContainer');
+                p.classList.remove('bg-red-50', 'border-red-300');
+            } else {
+                // Clear error if valid now
+                input.setCustomValidity(""); // Clear custom errors on typing
+                input.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
+            }
+        }
+
+        function populateReview() {
+            const getVal = (name) => document.querySelector(`[name="${name}"]`)?.value || '';
+            
+            // Format inputs just in case (e.g. if updated programmatically)
+            const formatIfNeeds = (str) => toTitleCase(str);
+
+            // Build Name
+            let name = `${formatIfNeeds(getVal('studentLastName'))}, ${formatIfNeeds(getVal('studentFirstName'))} ${formatIfNeeds(getVal('studentMiddleName'))}`;
+            const suffix = document.querySelector('select[name="studentSuffix"]').value;
+            if(suffix && suffix !== '') name += ` ${suffix}`;
+            
+            // Build DOB
+            const dob = `${getVal('dobMonth')} ${getVal('dobDay')}, ${getVal('dobYear')}`;
+            
+            // Build Parents Names (Added Logic)
+            let father = `${formatIfNeeds(getVal('fatherFirstName'))} ${formatIfNeeds(getVal('fatherMiddleName'))} ${formatIfNeeds(getVal('fatherLastName'))}`;
+            const fatherSuffix = document.querySelector('select[name="fatherSuffix"]').value;
+            if(fatherSuffix && fatherSuffix !== '') father += ` ${fatherSuffix}`;
+            // Clean up extra spaces if fields are empty
+            father = father.replace(/\s+/g, ' ').trim();
+
+            let mother = `${formatIfNeeds(getVal('motherFirstName'))} ${formatIfNeeds(getVal('motherMiddleName'))} ${formatIfNeeds(getVal('motherLastName'))}`;
+            mother = mother.replace(/\s+/g, ' ').trim();
+
+            // Set values
+            document.getElementById('reviewName').textContent = name;
+            document.getElementById('reviewSection').textContent = getVal('section');
+            document.getElementById('reviewDOB').textContent = dob;
+            document.getElementById('reviewGender').textContent = getVal('gender');
+            
+            // Set Parents (Added Logic)
+            document.getElementById('reviewFather').textContent = father || "N/A";
+            document.getElementById('reviewMother').textContent = mother || "N/A";
+
+            document.getElementById('reviewAddress').textContent = `${getVal('barangay')}, ${getVal('municipality')}, Romblon`;
+            document.getElementById('reviewAmbition').textContent = getVal('ambition');
+        }
+
+        // --- BUSINESS LOGIC ---
+
+        function toggleSuffix() {
+            const gender = document.getElementById('genderSelect').value;
+            const suffixInput = document.getElementById('studentSuffixInput');
+            const suffixLabel = document.getElementById('studentSuffixLabel'); // NEW: Get label
+            
+            if(gender === 'Male') {
+                suffixInput.classList.remove('hidden');
+                suffixLabel.classList.remove('hidden'); // Show Label
+            } else {
+                suffixInput.classList.add('hidden');
+                suffixLabel.classList.add('hidden'); // Hide Label
+                suffixInput.value = ''; // Reset value
+            }
+        }
+
+        function updateBarangays() {
+            const municipalitySelect = document.getElementById('municipalitySelect');
+            const barangaySelect = document.getElementById('barangaySelect');
+            const selectedMunicipality = municipalitySelect.value;
+            
+            // Save current selection if re-populating draft
+            const currentBarangay = barangaySelect.value;
+
+            barangaySelect.innerHTML = '<option value="" disabled selected>Select Barangay</option>';
+            
+            if (selectedMunicipality && barangayData[selectedMunicipality]) {
+                const barangays = barangayData[selectedMunicipality];
+                barangays.sort();
+                
+                barangays.forEach(barangay => {
+                    const option = document.createElement('option');
+                    option.value = barangay;
+                    option.textContent = barangay;
+                    barangaySelect.appendChild(option);
+                });
+                
+                barangaySelect.disabled = false;
+            } else {
+                barangaySelect.innerHTML = '<option value="" disabled selected>Select Municipality First</option>';
+                barangaySelect.disabled = true;
+            }
+            // Trigger auto-save whenever municipality changes
+            saveDraft();
+        }
+
+        function calculateAge() {
+            const monthStr = document.getElementById('dobMonth').value;
+            const day = document.getElementById('dobDay').value;
+            const year = document.getElementById('dobYear').value;
+            const display = document.getElementById('calculatedAge');
+
+            if (!monthStr || !day || !year) {
+                display.classList.add('hidden');
+                return;
+            }
+
+            // Convert month name to index (0-11)
+            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            const monthIndex = months.indexOf(monthStr);
+
+            if (monthIndex === -1) return;
+
+            const today = new Date();
+            const birthDate = new Date(year, monthIndex, day);
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+
+            if(age >= 0) {
+                display.textContent = `Age: ${age}`;
+                display.classList.remove('hidden');
+            } else {
+                display.classList.add('hidden');
+            }
+        }
+
+        // --- AUTO SAVE ---
+
+        function saveDraft() {
+            const formData = new FormData(document.getElementById('studentForm'));
+            const data = {};
+            formData.forEach((value, key) => data[key] = value);
+            localStorage.setItem(draftKey, JSON.stringify(data));
+            
+            // Visual feedback
+            const status = document.getElementById('autoSaveStatus');
+            status.style.opacity = '1';
+            setTimeout(() => status.style.opacity = '0', 2000);
+        }
+
+        function loadDraft() {
+            const saved = localStorage.getItem(draftKey);
+            if (!saved) return;
+
+            const data = JSON.parse(saved);
+            const form = document.getElementById('studentForm');
+
+            // Populate simple fields
+            for (const key in data) {
+                const input = form.querySelector(`[name="${key}"]`);
+                if (input && key !== 'barangay' && input.type !== 'checkbox') {
+                    input.value = data[key];
+                }
+            }
+
+            // Handle special logic
+            toggleSuffix(); // Check gender to show/hide suffix
+
+            // Handle Municipality -> Barangay dependency
+            if (data.municipality) {
+                // Ensure municipality is set before updating options
+                const munSelect = document.getElementById('municipalitySelect');
+                munSelect.value = data.municipality;
+                
+                // Load options
+                updateBarangays();
+                
+                // Now set the barangay value
+                if (data.barangay) {
+                    const barSelect = document.getElementById('barangaySelect');
+                    barSelect.value = data.barangay;
+                }
+            }
+            
+            // Recalculate age if DOB is present
+            calculateAge();
+        }
+
+        function clearDraft() {
+            localStorage.removeItem(draftKey);
+        }
+
+        // Listen for changes to save draft
+        document.getElementById('studentForm').addEventListener('input', saveDraft);
+        document.getElementById('studentForm').addEventListener('change', saveDraft);
+
+        // --- INITIALIZATION ---
+
+        window.onload = function() {
+            // Load saved student data
+            loadDraft();
+        };
+
+        // --- MODAL LOGIC ---
+        function openModal(data) {
+            const modal = document.getElementById('successModal');
+            const modalContent = document.getElementById('successModalContent');
+            const icon = document.getElementById('modalIcon');
+            const title = document.getElementById('modalTitle');
+            const subtitle = document.getElementById('modalSubtitle');
+            const dataContainer = document.getElementById('modalDataContainer');
+            const btn = document.getElementById('closeModalBtn');
+
+            // Reset Styles (Default Success)
+            icon.className = 'fas fa-check-circle text-5xl text-emerald-500';
+            title.textContent = 'Registration Complete';
+            title.className = 'text-3xl font-bold academic-font text-slate-800 mb-2';
+            subtitle.textContent = 'Your record has been successfully submitted.';
+            dataContainer.classList.remove('hidden');
+            btn.textContent = 'Done & Close';
+            btn.className = 'w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded-xl shadow-lg transition transform hover:-translate-y-1';
+
+            // Generate Reference
+            const ref = 'SR-' + Math.floor(100000 + Math.random() * 900000);
+            
+            // Helper for Title Case (reused)
+            const toTitle = (str) => {
+                if (!str) return '';
+                return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+            };
+
+            // 1. Populate Student Profile
+            let middle = data.get('studentMiddleName');
+            let sName = `${toTitle(data.get('studentLastName'))}, ${toTitle(data.get('studentFirstName'))}`;
+            if (middle) sName += ` ${toTitle(middle)}`;
+            if(data.get('studentSuffix')) sName += ` ${data.get('studentSuffix')}`;
+            document.getElementById('modalStudentName').textContent = sName;
+            
+            document.getElementById('modalSection').textContent = data.get('section');
+            document.getElementById('modalGender').textContent = data.get('gender');
+            
+            const dob = `${data.get('dobMonth')} ${data.get('dobDay')}, ${data.get('dobYear')}`;
+            document.getElementById('modalDOB').textContent = dob;
+
+            // Calculate Age for Modal
+            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            const monthIndex = months.indexOf(data.get('dobMonth'));
+            const today = new Date();
+            const birthDate = new Date(data.get('dobYear'), monthIndex, data.get('dobDay'));
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            document.getElementById('modalAge').textContent = age + " Years Old";
+
+
+            // 2. Populate Family Background
+            let father = `${toTitle(data.get('fatherFirstName'))} ${toTitle(data.get('fatherMiddleName'))} ${toTitle(data.get('fatherLastName'))}`;
+            if(data.get('fatherSuffix')) father += ` ${data.get('fatherSuffix')}`;
+            father = father.replace(/\s+/g, ' ').trim();
+            document.getElementById('modalFather').textContent = father || "N/A";
+
+            let mother = `${toTitle(data.get('motherFirstName'))} ${toTitle(data.get('motherMiddleName'))} ${toTitle(data.get('motherLastName'))}`;
+            mother = mother.replace(/\s+/g, ' ').trim();
+            document.getElementById('modalMother').textContent = mother || "N/A";
+
+
+            // 3. Populate Location & Ambition
+            document.getElementById('modalAddress').textContent = `${data.get('barangay')}, ${data.get('municipality')}, Romblon`;
+            document.getElementById('modalAmbition').textContent = data.get('ambition');
+
+            // 4. Reference
+            document.getElementById('modalRef').textContent = ref;
+            
+            modal.classList.remove('hidden');
+            // Trigger animation
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function openDuplicateModal(name) {
+            const modal = document.getElementById('successModal');
+            const modalContent = document.getElementById('successModalContent');
+            const icon = document.getElementById('modalIcon');
+            const title = document.getElementById('modalTitle');
+            const subtitle = document.getElementById('modalSubtitle');
+            const dataContainer = document.getElementById('modalDataContainer');
+            const btn = document.getElementById('closeModalBtn');
+
+            // Warning Styles
+            icon.className = 'fas fa-exclamation-circle text-5xl text-amber-500';
+            
+            title.textContent = 'Record Already Exists';
+            title.className = 'text-3xl font-bold academic-font text-slate-800 mb-2';
+            
+            subtitle.textContent = `Student Name: ${name}`;
+            
+            // Hide Data Container since it's an error
+            dataContainer.classList.add('hidden');
+
+            btn.textContent = 'Review Information';
+            btn.className = 'w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded-xl shadow-lg transition transform hover:-translate-y-1';
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('successModal');
+            const modalContent = document.getElementById('successModalContent');
+            
+            // Animate out
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // --- SUBMISSION ---
+
+        // Helper: Check local storage for duplicates
+        function isDuplicateLocal(name) {
+            const list = JSON.parse(localStorage.getItem(submittedKey) || '[]');
+            return list.includes(name);
+        }
+
+        // Helper: Save to local storage
+        function saveLocalSubmission(name) {
+            const list = JSON.parse(localStorage.getItem(submittedKey) || '[]');
+            if (!list.includes(name)) {
+                list.push(name);
+                localStorage.setItem(submittedKey, JSON.stringify(list));
+            }
+        }
+
+        document.getElementById('studentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log("Submit event triggered."); // Debugging
+            
+            // Ensure last step (Review/Privacy) is valid before submitting
+            if (!validateStep(4)) {
+                console.log("Validation failed on Step 4.");
+                alert("Please check the 'Data Privacy Consent' box to continue.");
+                return;
+            }
+
+            const btn = document.getElementById('submitBtn');
+            const status = document.getElementById('statusMessage');
+            
+            // Hardcoded URL (Replaced input field)
+            const scriptURL = "https://script.google.com/macros/s/AKfycbxBIBFwW5TgAQvwa2h4OF04bCkePzroQc-fecpHc0RbXWmb_BMDATohaFPSoPnI9YRYhA/exec";
+            
+            // Grab data for Modal BEFORE form resets
+            const formData = new FormData(e.target);
+
+            // Construct name locally for Client-Side Duplicate Check
+            let localStudentName = `${formData.get('studentLastName')}, ${formData.get('studentFirstName')}`;
+            if (formData.get('studentMiddleName')) localStudentName += ` ${formData.get('studentMiddleName')}`;
+            if (formData.get('studentSuffix')) localStudentName += ` ${formData.get('studentSuffix')}`;
+            localStudentName = localStudentName.trim().toUpperCase(); // Normalize for comparison
+
+            // 1. Client-Side Duplicate Check
+            if (isDuplicateLocal(localStudentName)) {
+                openDuplicateModal(localStudentName);
+                return; // Stop here, do not fetch
+            }
+
+            // Loading State
+            btn.disabled = true;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Processing...';
+            status.className = 'hidden';
+
+            console.log("Submitting to:", scriptURL);
+
+            // 2. Opaque Submission (no-cors)
+            // This ignores CORS errors but returns an opaque response (we can't read success/fail message)
+            // We assume success if the fetch promise resolves.
+            const params = new URLSearchParams();
+            for (const pair of formData) {
+                params.append(pair[0], pair[1]);
+            }
+
+            fetch(scriptURL, {
+                method: 'POST',
+                body: params,
+                mode: 'no-cors' // Fixes the "Failed to fetch" CORS error
+            })
+            .then(() => {
+                // Since mode is no-cors, we can't check response.ok or response.json()
+                // We assume the data was sent successfully.
+                console.log("Request sent (Opaque response).");
+
+                // Save locally to prevent immediate duplicate
+                saveLocalSubmission(localStudentName);
+
+                // Show Success Modal
+                openModal(formData);
+                
+                // Reset Form logic
+                e.target.reset();
+                clearDraft(); 
+                currentStep = 1;
+                showStep(1); 
+                document.getElementById('calculatedAge').classList.add('hidden');
+                toggleConsentVisuals();
+                
+                // Reset button
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            })
+            .catch(error => {
+                console.error('Submission Error:', error);
+                
+                status.className = 'mt-6 mx-auto p-4 rounded-xl text-center text-sm max-w-md bg-red-50 text-red-800 border border-red-200 shadow-sm';
+                status.innerHTML = '<i class="fas fa-exclamation-triangle text-xl mb-2 block"></i> <strong>Submission Failed</strong><br>Network error. Please check your connection.';
+                status.classList.remove('hidden');
+                
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            });
+        });
+    </script>
+</body>
+</html>
